@@ -1,9 +1,9 @@
 import requests
 import urllib.request, json
 
-def get_respone():
+def get_respone(name, page, limit):
     try:
-        url = "https://api.fwc.gov.au/api/v1/awards?page=1&limit=10"
+        url = f"https://api.fwc.gov.au/api/v1/{name}?page={page}&limit={limit}"
         hdr ={
         'Cache-Control': 'no-cache',
         'Ocp-Apim-Subscription-Key': '04d87071235c4a0589baf617a3ab5fa0',
@@ -14,5 +14,4 @@ def get_respone():
         return response.read()
     except Exception as e:
         return e
-
 

@@ -5,8 +5,8 @@ from API import get_respone
 import json
 
 
-def get_data():
-    json_string = get_respone().decode('utf-8')
+def get_data(name,page,limit):
+    json_string = get_respone(name,page,limit).decode('utf-8')
     data = json.loads(json_string)
     results = data.get('results', [])
     data = []
@@ -17,4 +17,4 @@ def get_data():
 
 
 
-print(get_data())
+print(get_data('awards',1,60))
