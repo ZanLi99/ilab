@@ -17,4 +17,6 @@ def get_data(name,page,limit):
 
 
 
-print(get_data('awards',1,60))
+#print(get_data('awards',1,60))
+print(get_data('awards/MA000009/classifications/311/pay-rates',1,60))
+get_data('awards/MA000009/classifications/311/pay-rates',1,60).to_csv('MA000009_311.csv', index=False)
