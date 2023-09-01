@@ -49,7 +49,7 @@ def classification():
                 for result in results:
                     temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/classification.csv', index=False)
+    temp.to_csv('./streamlit/classification.csv', index=False)
     return temp
 
 def penalty():
@@ -125,11 +125,11 @@ def allowance():
     return temp
 
 
-awards()
-classification()
-penalty()
-ex_allowance()
-allowance()
+# awards()
+# classification()
+# penalty()
+# ex_allowance()
+# allowance()
 
 
  
