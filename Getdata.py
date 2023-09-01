@@ -1,9 +1,14 @@
 # Create a new DataFrame to save the dataset
 import pandas as pd
 import numpy as np
-from API import get_awards, get_classification
+from API import get_awards, get_classification, get_penalty,get_ex_allowance,get_data
 import json
 import os
+
+# allowance: wage-allowances
+# classification: classifications
+# penalty: penalties
+# ex_allowance: expense-allowances
 
 # Because every table has different rows, I need to know the shape of the table.
 # And then I can use for to get the data.
@@ -18,7 +23,7 @@ def awards():
         for result in results:
             temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/awards.csv')
+    temp.to_csv('./Files/awards.csv', index=False)
     return temp
 
 
@@ -32,23 +37,100 @@ def classification():
             flag = True
     if flag == False:
         awards()
-    flag = True
+
     if flag == True:
         temp = []
         for i in df['award_fixed_id']:
-            counts = json.loads(get_classification(i,1,1))["_meta"]["result_count"]
+            counts = json.loads(get_data(i,'classifications',1,1))["_meta"]["result_count"]
             for j in range(1,(counts//100+2)):          
-                json_string = get_classification(i,j,100).decode('utf-8')
+                json_string = get_data(i,'classifications',j,100).decode('utf-8')
                 data = json.loads(json_string)
                 results = data.get('results', [])
                 for result in results:
                     temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/classification.csv')
+    temp.to_csv('./Files/classification.csv', index=False)
     return temp
+
+def penalty():
+    csv_file_path = "./Files/awards.csv"
+    flag = False
+    if os.path.exists(csv_file_path):   
+        df = pd.read_csv(csv_file_path)  
+        if "award_fixed_id" in df.columns:
+            flag = True
+    if flag == False:
+        awards()
+
+    if flag == True:
+        temp = []
+        for i in df['award_fixed_id']:
+            counts = json.loads(get_data(i,'penalties',1,1))["_meta"]["result_count"]
+            for j in range(1,(counts//100+2)):          
+                json_string = get_data(i,'penalties',j,100).decode('utf-8')
+                data = json.loads(json_string)
+                results = data.get('results', [])
+                for result in results:
+                    temp.append(result)
+    temp = pd.DataFrame(temp)
+    temp.to_csv('./Files/penalty.csv', index=False)
+    return temp
+
+def ex_allowance():
+    csv_file_path = "./Files/awards.csv"
+    flag = False
+    if os.path.exists(csv_file_path):   
+        df = pd.read_csv(csv_file_path)  
+        if "award_fixed_id" in df.columns:
+            flag = True
+    if flag == False:
+        awards()
+
+    if flag == True:
+        temp = []
+        for i in df['award_fixed_id']:
+            counts = json.loads(get_data(i,'expense-allowances',1,1))["_meta"]["result_count"]
+            for j in range(1,(counts//100+2)):          
+                json_string = get_data(i,'expense-allowances',j,100).decode('utf-8')
+                data = json.loads(json_string)
+                results = data.get('results', [])
+                for result in results:
+                    temp.append(result)
+    temp = pd.DataFrame(temp)
+    temp.to_csv('./Files/expense-allowance.csv', index=False)
+    return temp
+
+def allowance():
+    csv_file_path = "./Files/awards.csv"
+    flag = False
+    if os.path.exists(csv_file_path):   
+        df = pd.read_csv(csv_file_path)  
+        if "award_fixed_id" in df.columns:
+            flag = True
+    if flag == False:
+        awards()
+
+    if flag == True:
+        temp = []
+        for i in df['award_fixed_id']:
+            counts = json.loads(get_data(i,'wage-allowances',1,1))["_meta"]["result_count"]
+            for j in range(1,(counts//100+2)):          
+                json_string = get_data(i,'wage-allowances',j,100).decode('utf-8')
+                data = json.loads(json_string)
+                results = data.get('results', [])
+                for result in results:
+                    temp.append(result)
+    temp = pd.DataFrame(temp)
+    temp.to_csv('./Files/allowance.csv', index=False)
+    return temp
+
 
 # awards()
 # classification()
+# penalty()
+#ex_allowance()
+#allowance()
+
 
  
 
