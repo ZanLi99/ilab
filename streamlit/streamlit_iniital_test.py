@@ -1,11 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-awards = pd.read_csv(
-    r'C:\Users\range\OneDrive\Desktop\ILAB_2\ilab\Files\awards.csv')
+awards = pd.read_csv('./streamlit/awards.csv')
 
-classification = pd.read_csv(
-    r'C:\Users\range\OneDrive\Desktop\ILAB_2\ilab\classification.csv')
+classification = pd.read_csv('./streamlit/classification.csv')
 
 award_list = awards['name']
 with st.form('award_form'):
