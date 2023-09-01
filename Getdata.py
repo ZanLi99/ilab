@@ -1,7 +1,7 @@
 # Create a new DataFrame to save the dataset
 import pandas as pd
 import numpy as np
-from API import get_awards, get_classification, get_penalty,get_ex_allowance,get_data
+from API import get_awards,get_data
 import json
 import os
 
@@ -23,13 +23,13 @@ def awards():
         for result in results:
             temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/awards.csv', index=False)
+    temp.to_csv('./streamlit/awards.csv', index=False)
     return temp
 
 
 # read awardid from awards.csv, if there is no awards.csv, creating it.
 def classification():
-    csv_file_path = "./Files/awards.csv"
+    csv_file_path = "./streamlit/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -53,7 +53,7 @@ def classification():
     return temp
 
 def penalty():
-    csv_file_path = "./Files/awards.csv"
+    csv_file_path = "./streamlit/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -73,11 +73,11 @@ def penalty():
                 for result in results:
                     temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/penalty.csv', index=False)
+    temp.to_csv('./streamlit/penalty.csv', index=False)
     return temp
 
 def ex_allowance():
-    csv_file_path = "./Files/awards.csv"
+    csv_file_path = "./streamlit/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -97,11 +97,11 @@ def ex_allowance():
                 for result in results:
                     temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/expense-allowance.csv', index=False)
+    temp.to_csv('./streamlit/expense-allowance.csv', index=False)
     return temp
 
 def allowance():
-    csv_file_path = "./Files/awards.csv"
+    csv_file_path = "./streamlit/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -121,15 +121,15 @@ def allowance():
                 for result in results:
                     temp.append(result)
     temp = pd.DataFrame(temp)
-    temp.to_csv('./Files/allowance.csv', index=False)
+    temp.to_csv('./streamlit/allowance.csv', index=False)
     return temp
 
 
-# awards()
-# classification()
-# penalty()
-#ex_allowance()
-#allowance()
+awards()
+classification()
+penalty()
+ex_allowance()
+allowance()
 
 
  
