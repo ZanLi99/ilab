@@ -46,8 +46,11 @@ def classification():
                 json_string = get_data(i,'classifications',j,100).decode('utf-8')
                 data = json.loads(json_string)
                 results = data.get('results', [])
+                for dict in results:
+                        dict['awards'] = i
                 for result in results:
                     temp.append(result)
+                  
     temp = pd.DataFrame(temp)
     temp.to_csv('./streamlit/classification.csv', index=False)
     return temp
@@ -70,8 +73,11 @@ def penalty():
                 json_string = get_data(i,'penalties',j,100).decode('utf-8')
                 data = json.loads(json_string)
                 results = data.get('results', [])
+                for dict in results:
+                        dict['awards'] = i
                 for result in results:
                     temp.append(result)
+                    
     temp = pd.DataFrame(temp)
     temp.to_csv('./streamlit/penalty.csv', index=False)
     return temp
@@ -94,8 +100,11 @@ def ex_allowance():
                 json_string = get_data(i,'expense-allowances',j,100).decode('utf-8')
                 data = json.loads(json_string)
                 results = data.get('results', [])
+                for dict in results:
+                        dict['awards'] = i
                 for result in results:
                     temp.append(result)
+                    
     temp = pd.DataFrame(temp)
     temp.to_csv('./streamlit/expense-allowance.csv', index=False)
     return temp
@@ -118,8 +127,11 @@ def allowance():
                 json_string = get_data(i,'wage-allowances',j,100).decode('utf-8')
                 data = json.loads(json_string)
                 results = data.get('results', [])
+                for dict in results:
+                        dict['awards'] = i
                 for result in results:
                     temp.append(result)
+                    
     temp = pd.DataFrame(temp)
     temp.to_csv('./streamlit/allowance.csv', index=False)
     return temp
@@ -131,6 +143,7 @@ def allowance():
 # ex_allowance()
 # allowance()
 
+    
 
  
 
