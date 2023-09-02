@@ -41,9 +41,9 @@ def classification():
     if flag == True:
         temp = []
         for i in df['award_fixed_id']:
-            counts = json.loads(get_data(i,'classifications',1,1))["_meta"]["result_count"]
+            counts = json.loads(get_data(i,'pay-rates',1,1))["_meta"]["result_count"]
             for j in range(1,(counts//100+2)):          
-                json_string = get_data(i,'classifications',j,100).decode('utf-8')
+                json_string = get_data(i,'pay-rates',j,100).decode('utf-8')
                 data = json.loads(json_string)
                 results = data.get('results', [])
                 for dict in results:
@@ -138,7 +138,7 @@ def allowance():
 
 
 # awards()
-# classification()
+classification()
 # penalty()
 # ex_allowance()
 # allowance()
