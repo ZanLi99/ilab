@@ -15,7 +15,7 @@ with st.form('award_form'):
 
 current_award = awards.loc[awards["name"] == current_award]
 
-classification_award = classification.loc[classification['awardID'].isin(current_award['award_id'])]
+classification_award = classification.loc[classification['awards'].isin(current_award['award_id'])]
 
 with st.form('employee_type'):
     employee_type = st.selectbox(
