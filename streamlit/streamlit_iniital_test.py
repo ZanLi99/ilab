@@ -19,13 +19,13 @@ classification_award = classification.loc[classification['awards'].isin(current_
 
 with st.form('employee_type'):
     employee_type = st.selectbox(
-        'employee_type', options=classification_award['employeeRateTypeCode'].unique(), key='employee_type_form')
+        'employee_type', options=classification_award['employee_rate_type_code'].unique(), key='employee_type_form')
     submit_1 = st.form_submit_button(label='submit')
     if submit_1:
         st.write('you have submitted ', employee_type)
 
 classification_award = classification_award.loc[
-    classification_award["employeeRateTypeCode"] == employee_type]
+    classification_award["employee_rate_type_code"] == employee_type]
 
 
 with st.form('parent_form'):
