@@ -1,7 +1,8 @@
 import streamlit as st
 from st_session import initialize_st
 from model import filter_job
-from function import input,select_class
+from function import input,select_class, select_rate_type
+
 
 
     
@@ -13,3 +14,9 @@ st.write(st.session_state['input'])
 st.dataframe(filter_job())
 
 select_class()
+
+
+st.dataframe(filter_job())
+
+select_rate_type()
+

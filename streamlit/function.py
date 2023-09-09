@@ -17,3 +17,20 @@ def select_class():
             st.session_state['current_class'] = []
             st.session_state['current_class'].extend(selected_values)
             st.write('you have submitted ', st.session_state['current_class'])
+
+
+
+
+def select_rate_type():
+    classification = st.session_state['classification']
+    classification.dropna(subset=["base_rate_type"], inplace=True)
+    classification = classification[~classification['base_rate_type'].isin(['nan', 'engagement rate', 'piece rate'])]
+    classification['base_rate_type'] = classification['base_rate_type'].replace('ordinary hourly', 'hourly')
+    base_rate_type = classification['base_rate_type'].drop_duplicates()
+
+    with st.form('base_rate_type'):
+        current_rate_type = st.selectbox('what type of base rate',
+                            options=sorted(base_rate_type), key='base_rate_type')
+        submitted = st.form_submit_button(label='submit')
+        if submitted:
+            st.write('you have submitted ', current_rate_type)
