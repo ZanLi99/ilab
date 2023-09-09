@@ -1,7 +1,7 @@
 import streamlit as st
 from st_session import initialize_st
 from model import filter_job
-from function import input,select_class, select_rate_type
+from function import input, select_class, select_rate_type
 
 
 

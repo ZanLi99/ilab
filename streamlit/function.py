@@ -23,10 +23,20 @@ def select_class():
 
 def select_rate_type():
     classification = st.session_state['classification']
-    classification.dropna(subset=["base_rate_type"], inplace=True)
+    classification.dropna(subset=["base_rate_type", "base_rate"], inplace=True)
     classification = classification[~classification['base_rate_type'].isin(['nan', 'engagement rate', 'piece rate'])]
     classification['base_rate_type'] = classification['base_rate_type'].replace('ordinary hourly', 'hourly')
+
     base_rate_type = classification['base_rate_type'].drop_duplicates()
+
+    classification['base_rate_annual'] = classification.apply(
+        lambda row: row['base_rate'] * 40 * 52 if row['base_rate_type'] == 'hourly' else
+        row['base_rate'] * 12 if row['base_rate_type'] == 'monthly' else
+        row['base_rate'] * 5 * 52 if row['base_rate_type'] == 'daily' else
+        row['base_rate'] * 52 if row['base_rate_type'] == 'weekly' else
+        row['base_rate'], axis=1)
+
+    st.session_state['classification_annual_rate'] = classification
 
     with st.form('base_rate_type'):
         current_rate_type = st.selectbox('what type of base rate',
@@ -34,3 +44,5 @@ def select_rate_type():
         submitted = st.form_submit_button(label='submit')
         if submitted:
             st.write('you have submitted ', current_rate_type)
+
+    st.dataframe(st.session_state['classification_annual_rate'])
