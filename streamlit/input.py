@@ -1,7 +1,7 @@
 import streamlit as st
 from st_session import initialize_st
 from model import filter_job
-from function import selectawards, input
+from function import selectawards, input, select_rate_type
 
 
     
@@ -14,3 +14,5 @@ selectawards()
 
 
 st.dataframe(filter_job())
+
+select_rate_type()
