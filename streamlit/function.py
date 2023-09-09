@@ -7,15 +7,17 @@ def input():
     st.write("What's your input:", user_input)
     st.session_state['input'] = user_input
 
-def selectawards():
+def select_class():
     contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['input'], case=False, na='ignore')
     temp = st.session_state['classification'][contains_doctor]['classification'].drop_duplicates()
-    with st.form('class'):
-        current_award = st.selectbox('what award do you fall under',
-                            options=sorted(temp), key='option_award')
-        submitted = st.form_submit_button(label='submit_class')
-        if submitted:
-            st.write('you have submitted ', current_award)
+    with st.form('sub_class'):
+        selected_values = st.multiselect("what classification do you fall under", temp)
+        submit = st.form_submit_button(label='class_submit')
+        if submit:
+            st.session_state['current_class'] = []
+            st.session_state['current_class'].extend(selected_values)
+            st.write('you have submitted ', st.session_state['current_class'])
+
 
 
 

@@ -1,18 +1,22 @@
 import streamlit as st
 from st_session import initialize_st
 from model import filter_job
-from function import selectawards, input, select_rate_type
+from function import input,select_class, select_rate_type
+
 
 
     
 initialize_st()
 input()
-
 st.write(st.session_state['input'])
+#selectawards()
+#st.write(st.session_state['current_award'])
+st.dataframe(filter_job())
 
-selectawards()
+select_class()
 
 
 st.dataframe(filter_job())
 
 select_rate_type()
+
