@@ -17,7 +17,7 @@ def get_awards(page, limit):
         return e
 
 # allowance: wage-allowances
-# classification: classifications
+# classification: pay-rates
 # penalty: penalties
 # ex_allowance: expense-allowances
 def get_data(awardcode, parameter, page, limit):
