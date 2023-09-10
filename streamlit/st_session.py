@@ -14,3 +14,7 @@ def initialize_st():
 
     if 'classification_annual_rate' not in st.session_state:
         st.session_state['classification_annual_rate'] = []
+    if 'base_rate_type' not in st.session_state:
+        st.session_state['base_rate_type'] = []
+    if 'user_salary' not in st.session_state:
+        st.session_state['user_salary'] = []
