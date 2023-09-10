@@ -20,5 +20,5 @@ st.dataframe(filter_job())
 
 select_rate_type()
 
-base_rate()
+# base_rate(st.session_state.get('user_salary', None), st.session_state.get('current_rate_type', None))
 
