@@ -6,7 +6,7 @@ from base_rate import base_rate, base_rate_c, base_rate_p
 def input():
     st.title("input")
     user_input = st.text_input("your text", "")
-    st.write("What's your input:", user_input)
+    st.write("What's your role:", user_input)
     st.session_state['input'] = user_input
 
 def select_class():
