@@ -49,9 +49,12 @@ def base_rate(salary, type):
     # Group the DataFrame by 'classification' and calculate the mean of 'base_rate_annual'
     average_annual_rate = classification.groupby('classification')['base_rate_annual'].mean().reset_index()
 
+    highlighted_index = average_annual_rate[average_annual_rate['classification'].isin(st.session_state['current_class'])]
+
     # Create a bar chart to show the average base_rate_annual for each classification
     fig, ax = plt.subplots()
     ax.bar(average_annual_rate['classification'], average_annual_rate['base_rate_annual'])
+    ax.bar(highlighted_index['classification'], highlighted_index['base_rate_annual'],color = 'red')
 
     # Add a horizontal line for the user input value
     if user_salary_annual is not None:
@@ -112,14 +115,17 @@ def base_rate_c(salary, type, weekday, holiday):
 
     # Group the DataFrame by 'classification' and calculate the mean of 'base_rate_annual'
     average_annual_rate = classification.groupby('classification')['base_rate_annual'].mean().reset_index()
+    highlighted_index = average_annual_rate[average_annual_rate['classification'].isin(st.session_state['current_class'])]
 
     # Create a bar chart to show the average base_rate_annual for each classification
     fig, ax = plt.subplots()
     ax.bar(average_annual_rate['classification'], average_annual_rate['base_rate_annual'])
+    ax.bar(highlighted_index['classification'], highlighted_index['base_rate_annual'],color = 'red')
 
     # Add a horizontal line for the user input value
     if user_salary_annual is not None:
         ax.axhline(user_salary_annual, color='red', linestyle='--', label='Current Salary')
+
 
     # Set labels and legend
     ax.set_xlabel('Classification')
@@ -180,10 +186,12 @@ def base_rate_p(salary, type, weekday, holiday):
 
     # Group the DataFrame by 'classification' and calculate the mean of 'base_rate_annual'
     average_annual_rate = classification.groupby('classification')['base_rate_annual'].mean().reset_index()
+    highlighted_index = average_annual_rate[average_annual_rate['classification'].isin(st.session_state['current_class'])]
 
     # Create a bar chart to show the average base_rate_annual for each classification
     fig, ax = plt.subplots()
     ax.bar(average_annual_rate['classification'], average_annual_rate['base_rate_annual'])
+    ax.bar(highlighted_index['classification'], highlighted_index['base_rate_annual'],color = 'red')
 
     # Add a horizontal line for the user input value
     if user_salary_annual is not None:

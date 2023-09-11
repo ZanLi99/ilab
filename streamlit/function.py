@@ -10,15 +10,18 @@ def input():
     st.session_state['input'] = user_input
 
 def select_class():
-    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['input'], case=False, na='ignore')
-    temp = st.session_state['classification'][contains_doctor]['classification'].drop_duplicates()
+    classification = st.session_state['classification'][st.session_state['classification']['classification'].str.contains(st.session_state['input'], case=False, na='ignore')]
+    classification.dropna(subset=["base_rate_type", "base_rate"], inplace=True)
+    temp = classification['classification']
+    temp = temp.drop_duplicates()
+    temp = sorted(temp)
     with st.form('sub_class'):
         selected_values = st.multiselect("what classification do you fall under", temp)
         submit = st.form_submit_button(label='class_submit')
         if submit:
             st.session_state['current_class'] = []
             st.session_state['current_class'].extend(selected_values)
-            st.write('you have submitted ', st.session_state['current_class'])
+        st.write('you have submitted ', st.session_state['current_class'])
 
 
 
