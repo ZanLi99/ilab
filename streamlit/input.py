@@ -8,15 +8,15 @@ from function import input, select_class, select_rate_type, base_rate
     
 initialize_st()
 input()
-st.write(st.session_state['input'])
+#st.write(st.session_state['input'])
 #selectawards()
 #st.write(st.session_state['current_award'])
-st.dataframe(filter_job())
+#st.dataframe(filter_job())
 
 select_class()
 
 
-st.dataframe(filter_job())
+#st.dataframe(filter_job())
 
 select_rate_type()
 
