@@ -20,6 +20,7 @@ def get_awards(page, limit):
 # classification: pay-rates
 # penalty: penalties
 # ex_allowance: expense-allowances
+# clauseID: classifications
 def get_data(awardcode, parameter, page, limit):
     try:
         url = f"https://api.fwc.gov.au/api/v1/awards/{awardcode}/{parameter}?page={page}&limit={limit}"
