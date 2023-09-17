@@ -24,6 +24,13 @@ def select_class():
         st.write('you have submitted ', st.session_state['current_class'])
 
 
+def calculate_penalty():
+    if st.session_state['input']:
+        filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['input'], case=False)]
+        average_rate = filtered_df['rate'].mean()
+        st.session_state['penalty_rate'] = average_rate
+        st.write(st.session_state['penalty_rate'])
+
 
 
 def select_rate_type():
@@ -43,7 +50,9 @@ def select_rate_type():
                     st.write("For Full Time worker, normally 5days * 52weeks = 260days annually")
 
         user_salary = st.text_input("What is your salary? ", "")
+        penalty_hours = st.text_input("How many hours of your penalty? ", "")
         st.write("Salary:", user_salary, "(", current_rate_type, ")")
+        st.write("Penalty:", penalty_hours, "(","hours",")")
 
         if current_rate_type == "Daily" or current_rate_type == "Hourly":
             # Create a layout with two columns
@@ -88,7 +97,10 @@ def select_rate_type():
 
 
         user_salary_p = st.text_input("What is your salary? (Casual)", "")
+        penalty_hours_p = st.text_input("How many hours of your penalty ? ", "")
+
         st.write("Salary:", user_salary_p, "(", current_rate_type_p, ")")
+        st.write("Penalty:", penalty_hours_p, "(","hours",")")
 
         # Create a layout with two columns
         col1, col2 = st.columns(2)
@@ -113,6 +125,10 @@ def select_rate_type():
         st.session_state['current_rate_type_p'] = current_rate_type_p
 
         base_rate_c(st.session_state.get('user_salary_p', None), st.session_state.get('current_rate_type_p', None), weekday, holiday)
+
+
+
+
 
 
 # def base_rate(salary, type):
