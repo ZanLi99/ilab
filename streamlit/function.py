@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from base_rate import base_rate, base_rate_c, base_rate_p
+from datetime import datetime, timedelta
+
 
 def input():
     st.title("input")
@@ -43,6 +45,8 @@ def select_rate_type():
             submitted = st.form_submit_button(label='Submit')
 
             if submitted:
+                st.session_state['current_rate_type'] = current_rate_type
+
                 st.write('You have submitted ', current_rate_type)
                 if current_rate_type == "Hourly":
                     st.write("For Full Time worker, normally 40hours * 52weeks = 2080hours annually")
@@ -50,9 +54,11 @@ def select_rate_type():
                     st.write("For Full Time worker, normally 5days * 52weeks = 260days annually")
 
         user_salary = st.text_input("What is your salary? ", "")
-        penalty_hours = st.text_input("How many hours of your penalty? ", "")
+        if user_salary:
+            st.session_state['user_salary'] = user_salary
+        #penalty_hours = st.text_input("How many hours of your penalty? ", "")
         st.write("Salary:", user_salary, "(", current_rate_type, ")")
-        st.write("Penalty:", penalty_hours, "(","hours",")")
+        #st.write("Penalty:", penalty_hours, "(","hours",")")
 
         if current_rate_type == "Daily" or current_rate_type == "Hourly":
             # Create a layout with two columns
@@ -90,17 +96,22 @@ def select_rate_type():
 
         with st.form('base_rate_c'):
             current_rate_type_p = st.selectbox('What type of base rate', options=sorted(base_rate_type), key='base_rate_c')
+
             submitted = st.form_submit_button(label='Submit')
 
             if submitted:
+                st.session_state['current_rate_type'] = current_rate_type_p
                 st.write('You have submitted ', current_rate_type)
 
 
         user_salary_p = st.text_input("What is your salary? (Casual)", "")
-        penalty_hours_p = st.text_input("How many hours of your penalty ? ", "")
+        if user_salary_p:
+            st.session_state['user_salary'] = user_salary_p
+
+        #penalty_hours_p = st.text_input("How many hours of your penalty ? ", "")
 
         st.write("Salary:", user_salary_p, "(", current_rate_type_p, ")")
-        st.write("Penalty:", penalty_hours_p, "(","hours",")")
+        #st.write("Penalty:", penalty_hours_p, "(","hours",")")
 
         # Create a layout with two columns
         col1, col2 = st.columns(2)
@@ -125,6 +136,61 @@ def select_rate_type():
         st.session_state['current_rate_type_p'] = current_rate_type_p
 
         base_rate_c(st.session_state.get('user_salary_p', None), st.session_state.get('current_rate_type_p', None), weekday, holiday)
+
+def overtime():
+    start_time_str = st.text_input("Start time (format: dd-mm-yyyy)", "")
+    end_time_str = st.text_input("End time (format: dd-mm-yyyy)", "")
+
+    try:
+        start_time = datetime.strptime(start_time_str, "%d-%m-%Y")
+        end_time = datetime.strptime(end_time_str, "%d-%m-%Y")
+        st.write("The period time is:", start_time.strftime("%d-%m-%Y"), "to", end_time.strftime("%d-%m-%Y"))
+
+        start_date = datetime.strptime(start_time_str, "%d-%m-%Y")
+        end_date = datetime.strptime(end_time_str, "%d-%m-%Y")
+    except ValueError:
+        st.write("Please correct format: dd-mm-yyyy)")
+    
+    if st.session_state['current_rate_type'] == "Annual" and st.session_state['user_salary']:
+        salary = int(st.session_state['user_salary'])/2080
+    if st.session_state['current_rate_type'] == "Monthly" and st.session_state['user_salary']:
+        salary = int(st.session_state['user_salary'])/173
+    if st.session_state['current_rate_type'] == "Weekly" and st.session_state['user_salary']:
+        salary = int(st.session_state['user_salary'])/40
+    if st.session_state['current_rate_type'] == "Daily" and st.session_state['user_salary']:
+        salary = int(st.session_state['user_salary'])/8
+    if st.session_state['current_rate_type'] == "Hourly" and st.session_state['user_salary']:
+        salary = int(st.session_state['user_salary'])
+
+    days = st.number_input("How many working hours for your penalty?") 
+    
+    workday_count = count_workdays(start_date, end_date)
+    if workday_count and salary:
+        sum_salary = salary * workday_count * 8
+        sum_penalty = salary * st.session_state['penalty_rate']/100 * days
+        total = sum_salary + sum_penalty
+
+        fig1, ax1 = plt.subplots()
+        colors = ['#ff9999','#66b3ff','#99ff99']
+        ax1.pie([sum_penalty,total], labels=['penalty','salary'], colors=colors, autopct='%1.1f%%', startangle=90)
+        ax1.axis('equal')
+        st.pyplot(fig1)
+
+
+    # st.write("workday:", workday_count)
+    # st.write(st.session_state['current_rate_type'])
+    # st.write(st.session_state['penalty_rate'])
+    # st.write(salary)
+
+def count_workdays(start_date, end_date):
+        workdays = 0
+        current_date = start_date
+        while current_date <= end_date:
+            if current_date.weekday() < 5:  
+                workdays += 1
+            current_date += timedelta(days=1)
+        return workdays
+    
 
 
 

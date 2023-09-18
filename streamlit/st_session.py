@@ -9,6 +9,11 @@ def initialize_st():
         st.session_state['current_class'] = []
     if 'penalty_rate' not in st.session_state:
         st.session_state['penalty_rate'] = []
+    if 'current_rate_type' not in st.session_state:
+        st.session_state['current_rate_type'] = []
+    if 'user_salary' not in st.session_state:
+        st.session_state['user_salary'] = []
+
     st.session_state['awards'] = pd.read_csv('./streamlit/awards.csv')
     st.session_state['classification'] = pd.read_csv('./streamlit/classification.csv')
     st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
