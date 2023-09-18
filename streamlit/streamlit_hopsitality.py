@@ -3,13 +3,30 @@ import datetime
 import pandas as pd
 
 #st.time_input(datetime.time)
+st.set_page_config(page_title='WageCraft Hospitality Award')
 
-d = st.date_input("What is ", datetime.date(2019, 7, 6))
-time_1 = st.time_input('input starting time', step = 3600, key = 'time_1')
-time_2 = st.time_input('input starting time', step=3600, key='time_2')
+
+st.header('WageCraft hospitality wage calculator', divider='gray')
+st.subheader('input Job information')
+Adult_minimum_rate_weekly = {
+    'Introductory': 859.30,
+    'level_1': 882.80,
+    'level_2': 913.90,
+    'level_3': 945.00,
+    'level_4': 995.00,
+    'level_5': 1057.40,
+    'level_6': 1085.60
+}
+level = st.selectbox('What is your job level', Adult_minimum_rate_weekly)
+
 input_job_type = ['Casual', 'Part time', 'Full time']
+job_type = st.selectbox('What is your employment type', input_job_type)
 
-job_type = st.selectbox('what is your employment type', input_job_type)
+st.subheader('Input day of work information')
+d = st.date_input("What is the date of the day you worked ", datetime.date(2023, 9, 18))
+time_1 = st.time_input('What time did you start work', step=3600, key='time_1')
+time_2 = st.time_input(
+    'What time did you finish that work', step=3600, key='time_2')
 def combine_time_seconds(time_1, date_1, time_2, date_2):
     date = datetime.datetime.combine(date_1, time_1)
     date_2 = datetime.datetime.combine(date_2, time_2)
@@ -26,19 +43,7 @@ def combine_time_hours(time_1, date_1, time_2, date_2):
     date_diff = date_diff/3600
     return date_diff
 
-
 test = combine_time_hours(time_1, d, time_2, d)
-st.write(test/3600)
-Adult_minimum_rate_weekly = {
-    'introductory' : 859.30,
-    'level_1' : 882.80,
-    'level_2' : 913.90,
-    'level_3' : 945.00,
-    'level_4' : 995.00,
-    'level_5' : 1057.40,
-    'level_6' : 1085.60
-}
-level = st.selectbox('what is your level', Adult_minimum_rate_weekly)
 
 def junior_employee_payment(age):
     percent_rate = int
@@ -88,30 +93,21 @@ def penelty_rate_hours(time_1, date_1, time_2, date_2):
     if initial_date.weekday() == 6:
         len_hours = final_date - initial_date
         len_hours = (len_hours.seconds)/3600
-        st.write(len_hours, 'len_hours')
-        st.write('len_hours')
         percent_increase.append(0.75)
     elif initial_date.weekday() == 5:
         len_hours = final_date - initial_date
         len_hours = (len_hours.seconds)/3600
         percent_increase.append(len_hours * 0.5)
-        st.write(len_hours, 'len_hours')
-        st.write('len_hours')
     elif initial_date < date_7am < final_date or final_date < date_7am:
         len_early = date_7am - initial_date
         len_early = (len_early.seconds)/3600
-        st.write(len_early)
         flat_increase.append(len_early * 3.93)
     elif final_date > date_7am > initial_date or initial_date > date_7pm:
         len_late = date_7am - final_date
         len_late = (len_late.seconds)/3600
-        st.write(len_late)
         flat_increase.append(len_late * 2.62)
     else:
         pass
-    st.write(flat_increase, 'flat_increase',
-             percent_increase, 'percent_increase'
-             )
 
 
 penelty_rate_hours(time_1, d, time_2, d)
@@ -124,7 +120,16 @@ if input_job_type == 'casual_rate':
     casual_rate = 0.25
 casual_bonus = casual_rate * (Adult_minimum_rate_weekly[level])/38
 total_res = base_res + fixed_overtime + var_overtime + casual_bonus
-st.write(total_res)
-df_list = [base_res, fixed_overtime, var_overtime, casual_bonus]
-df = pd.DataFrame(df_list, columns =['values']) 
-st.bar_chart(df)
+overtime_sum = int(fixed_overtime + var_overtime)
+st.subheader('Information results')
+
+test_res = int(total_res)
+base_res = int(base_res)
+df_list = [[base_res, 'base pay'], [fixed_overtime, 'fixed overtime'], [var_overtime, 'var overtime'], [casual_bonus, 'casual bonus']]
+df = pd.DataFrame(df_list) 
+
+st.write('you should have earned a minimum of ',  f'${test_res}', 'over this time period' )
+st.write('This is made up of the combination of ', f'${base_res}' ,'in base pay and ' f'{overtime_sum}' ,'in overtime pay')
+df.columns = ['pay', 'type of bonus']
+df = df[df.pay > 0]
+st.bar_chart(data=df, y='pay', x='type of bonus')
