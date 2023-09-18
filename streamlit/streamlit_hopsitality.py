@@ -6,8 +6,8 @@ import pandas as pd
 st.set_page_config(page_title='WageCraft Hospitality Award')
 
 
-st.header('WageCraft hospitality wage calculator', divider='gray')
-st.subheader('input Job information')
+st.header('WageCraft Hospitality Wage Calculator', divider='gray')
+st.subheader('Input Job information')
 Adult_minimum_rate_weekly = {
     'Introductory': 859.30,
     'level_1': 882.80,
@@ -21,8 +21,8 @@ level = st.selectbox('What is your job level', Adult_minimum_rate_weekly)
 
 input_job_type = ['Casual', 'Part time', 'Full time']
 job_type = st.selectbox('What is your employment type', input_job_type)
-
-st.subheader('Input day of work information')
+st.subheader('Input Day of Work Information')
+age = st.number_input('How old are you in years')
 d = st.date_input("What is the date of the day you worked ", datetime.date(2023, 9, 18))
 time_1 = st.time_input('What time did you start work', step=3600, key='time_1')
 time_2 = st.time_input(
@@ -111,17 +111,18 @@ def penelty_rate_hours(time_1, date_1, time_2, date_2):
 
 
 penelty_rate_hours(time_1, d, time_2, d)
-
+age_penelty = junior_employee_payment(age)
+test = age_penelty * test
 base_res = (test * Adult_minimum_rate_weekly[level])/38
 fixed_overtime = sum(flat_increase)
-var_overtime = sum(percent_increase) * (Adult_minimum_rate_weekly[level])/38
+var_overtime = sum(percent_increase) * (Adult_minimum_rate_weekly[level])/38 * test
 casual_rate = 0
-if input_job_type == 'casual_rate':
+if job_type == 'Casual':
     casual_rate = 0.25
-casual_bonus = casual_rate * (Adult_minimum_rate_weekly[level])/38
+casual_bonus = int(casual_rate * (Adult_minimum_rate_weekly[level])/38 * test)
 total_res = base_res + fixed_overtime + var_overtime + casual_bonus
 overtime_sum = int(fixed_overtime + var_overtime)
-st.subheader('Information results')
+st.subheader('Payment Results')
 
 test_res = int(total_res)
 base_res = int(base_res)
@@ -130,6 +131,7 @@ df = pd.DataFrame(df_list)
 
 st.write('you should have earned a minimum of ',  f'${test_res}', 'over this time period' )
 st.write('This is made up of the combination of ', f'${base_res}' ,'in base pay and ' f'{overtime_sum}' ,'in overtime pay')
+st.write('You are receiving ', f'${casual_bonus}' ' for being a casual employee')
 df.columns = ['pay', 'type of bonus']
 df = df[df.pay > 0]
 st.bar_chart(data=df, y='pay', x='type of bonus')
