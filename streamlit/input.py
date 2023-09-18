@@ -22,5 +22,12 @@ select_rate_type()
 
 overtime()
 
-# base_rate(st.session_state.get('user_salary', None), st.session_state.get('current_rate_type', None))
+
+st.title("多日期选择示例")
+st.write("选择日期范围:")
+
+# 显示Dash应用程序的URL
+dash_app_url = "http://localhost:8050"  # 替换为您的Dash应用程序的URL
+st.markdown(f"您可以 [点击此处]({dash_app_url}) 访问Dash应用程序。")
+st.write(f'<iframe src="{dash_app_url}" width="800" height="600"></iframe>', unsafe_allow_html=True)
 
