@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def base_rate(salary, type):
-    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['input'],
+    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['user_input'],
                                                                                  case=False, na='ignore')
     temp = st.session_state['classification'][contains_doctor]['classification'].drop_duplicates()
 
@@ -72,7 +72,7 @@ def base_rate(salary, type):
     st.pyplot(fig)
 
 def base_rate_c(salary, type, weekday, holiday):
-    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['input'],
+    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['user_input'],
                                                                                  case=False, na='ignore')
     temp = st.session_state['classification'][contains_doctor]['classification'].drop_duplicates()
 
@@ -139,7 +139,7 @@ def base_rate_c(salary, type, weekday, holiday):
     st.pyplot(fig)
 
 def base_rate_p(salary, type, weekday, holiday):
-    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['input'],
+    contains_doctor = st.session_state['classification']['classification'].str.contains(st.session_state['user_input'],
                                                                                  case=False, na='ignore')
     temp = st.session_state['classification'][contains_doctor]['classification'].drop_duplicates()
 

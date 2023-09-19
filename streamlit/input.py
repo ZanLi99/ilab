@@ -1,33 +1,30 @@
 import streamlit as st
-from st_session import initialize_st
-from model import filter_job
-from function import input, select_class, select_rate_type, base_rate, calculate_penalty,overtime
+import datetime
 
 
 
+def inputjob():
+    st.title("What's your job?")
+    user_input = st.text_input("your job", "")
+    st.write("What's your role:", user_input)
+    st.session_state['user_input'] = user_input
     
-initialize_st()
-input()
-#st.write(st.session_state['input'])
-#selectawards()
-#st.write(st.session_state['current_award'])
-#st.dataframe(filter_job())
+def worktime():
+    st.title("What's your worktime of everyday?")
 
-select_class()
+    today = datetime.datetime.now()
 
-calculate_penalty()
-#st.dataframe(filter_job())
+    jan_1 = datetime.date(today.year-3, 1, 1)
+    dec_31 = datetime.date(today.year+1, 12, 31)
 
-select_rate_type()
+    worktime = st.date_input(
+        "Select your vacation for next year",
+        (today,today + datetime.timedelta(days=1)),
+        jan_1,
+        dec_31,
+        format="MM.DD.YYYY",
+    )
+    st.session_state['worktime'] = worktime
+    st.write("What's your worktime:", worktime[0], "to", worktime[1])
 
-overtime()
-
-
-st.title("多日期选择示例")
-st.write("选择日期范围:")
-
-# 显示Dash应用程序的URL
-dash_app_url = "http://localhost:8050"  # 替换为您的Dash应用程序的URL
-st.markdown(f"您可以 [点击此处]({dash_app_url}) 访问Dash应用程序。")
-st.write(f'<iframe src="{dash_app_url}" width="800" height="600"></iframe>', unsafe_allow_html=True)
 

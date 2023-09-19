@@ -13,6 +13,8 @@ def initialize_st():
         st.session_state['current_rate_type'] = []
     if 'user_salary' not in st.session_state:
         st.session_state['user_salary'] = []
+    if 'worktime' not in st.session_state:
+        st.session_state['worktime'] = []
 
     st.session_state['awards'] = pd.read_csv('./streamlit/awards.csv')
     st.session_state['classification'] = pd.read_csv('./streamlit/classification.csv')
