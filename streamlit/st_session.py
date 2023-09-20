@@ -15,6 +15,8 @@ def initialize_st():
         st.session_state['user_salary'] = []
     if 'worktime' not in st.session_state:
         st.session_state['worktime'] = []
+    if 'work_type' not in st.session_state:
+        st.session_state['work_type'] = []
 
     st.session_state['awards'] = pd.read_csv('./streamlit/awards.csv')
     st.session_state['classification'] = pd.read_csv('./streamlit/classification.csv')

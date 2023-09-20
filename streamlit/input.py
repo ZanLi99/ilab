@@ -8,7 +8,21 @@ def inputjob():
     user_input = st.text_input("your job", "")
     st.write("What's your role:", user_input)
     st.session_state['user_input'] = user_input
-    
+
+def work_type():
+    type = st.selectbox("What type of your job?", ("Full Time","Part Time","Casual"))
+    st.session_state['work_type'] = type
+    st.write("Your type of work:", type)
+
+def work_time_everyday():
+    st.title("What's your worktime of everyday?")
+    worktime_Start = st.time_input('Start time', datetime.time(8, 00))
+    worktime_End = st.time_input('End time', datetime.time(17, 00))
+    Lunch_breack = st.number_input('Lunch break (minutes):',0)
+    st.write('Your worktime:', worktime_Start, "to", worktime_End,
+             ", and you have", Lunch_breack, "minutes for lunch break.")
+
+
 def worktime():
     st.title("What's your worktime of everyday?")
 
