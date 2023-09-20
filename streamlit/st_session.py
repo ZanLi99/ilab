@@ -11,12 +11,24 @@ def initialize_st():
         st.session_state['penalty_rate'] = []
     if 'current_rate_type' not in st.session_state:
         st.session_state['current_rate_type'] = []
+    # ---------
     if 'user_salary' not in st.session_state:
         st.session_state['user_salary'] = []
+    # ---------
     if 'worktime' not in st.session_state:
         st.session_state['worktime'] = []
     if 'work_type' not in st.session_state:
         st.session_state['work_type'] = []
+    if 'worktime_Start' not in st.session_state:
+        st.session_state['worktime_Start'] = []
+    if 'worktime_End' not in st.session_state:
+        st.session_state['worktime_End']= []
+    if 'Lunch_breack' not in st.session_state:
+        st.session_state['Lunch_breack']= []
+    if 'User_salary' not in st.session_state:
+        st.session_state['User_salary'] = []
+    if 'salary_type' not in st.session_state:
+        st.session_state['salary_type'] = []
 
     st.session_state['awards'] = pd.read_csv('./streamlit/awards.csv')
     st.session_state['classification'] = pd.read_csv('./streamlit/classification.csv')
