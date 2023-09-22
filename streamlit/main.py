@@ -8,6 +8,7 @@ from input import inputjob,worktime,work_type,work_time_everyday,salary
 
 
 initialize_st()
+st.write(st.session_state['classification'])
 
 inputjob()
 work_type()
