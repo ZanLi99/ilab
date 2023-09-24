@@ -2,20 +2,30 @@ import streamlit as st
 import datetime
 
 
-
 def inputjob():
+    # The interface of input user's job
+    # st.session_state['user_input'] -> Save the job of inputting
+
     st.title("What's your job?")
     user_input = st.text_input("your job", "")
     st.write("What's your role:", user_input)
     st.session_state['user_input'] = user_input
 
 def work_type():
+    # The interface of input job's type
+    # st.session_state['work_type'] -> save the type of work
+
     st.title("What type of your job?")
     type = st.selectbox("", ("Full Time","Part Time","Casual"))
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
 
 def work_time_everyday():
+    # The interface of input user's worktime of everyday
+    # st.session_state['worktime_Start'] is the start time 
+    # st.session_state['worktime_End'] -> The end time
+    # st.session_state['Lunch_breack'] -> The break time / lunch time
+
     st.title("What's your worktime of everyday?")
     worktime_Start = st.time_input('Start time', datetime.time(8, 00))
     worktime_End = st.time_input('End time', datetime.time(17, 00))
