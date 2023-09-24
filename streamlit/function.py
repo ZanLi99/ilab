@@ -189,8 +189,20 @@ def count_workdays(start_date, end_date):
         return workdays
 
 
+def calculate_penalty():
+    if st.session_state['age'] == "16 years of age and under":
+        age_rate = 50
+    elif st.session_state['age'] == "17 years of age":
+        age_rate = 60
+    elif st.session_state['age'] == "18 years of age":
+        age_rate = 70
+    elif st.session_state['age'] == "19 years of age":
+        rate = 85
+    else:
+        age_rate = 100
 
-
+    salary = st.session_state['User_salary']
+    salary = salary * age_rate
 
 
 
