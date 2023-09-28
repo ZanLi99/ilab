@@ -38,3 +38,13 @@ def get_data(awardcode, parameter, page, limit):
         return response.read()
     except Exception as e:
         return(e)
+
+    
+import json
+import requests
+
+response = requests.get('https://date.nager.at/api/v3/publicholidays/2023/AU')
+public_holidays = json.loads(response.content)
+
+for public_holiday in public_holidays:
+    print(public_holiday['date'])
