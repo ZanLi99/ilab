@@ -4,11 +4,10 @@ from model import filter_job
 from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime
 from input import inputjob,worktime,work_type,work_time_everyday,salary
 
-
-
+from streamlit_chat import message
 
 initialize_st()
-st.write(st.session_state['classification'])
+#st.write(st.session_state['classification'])
 
 inputjob()
 work_type()
@@ -19,9 +18,9 @@ worktime()
 
 select_class()
 
-calculate_penalty()
+#calculate_penalty()
 
 
-select_rate_type()
+#select_rate_type()
 
-overtime()
+#overtime()

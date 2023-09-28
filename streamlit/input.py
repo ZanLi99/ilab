@@ -15,7 +15,7 @@ def work_type():
     # The interface of input job's type
     # st.session_state['work_type'] -> save the type of work
 
-    st.title("What type of your job?")
+    st.title("What's your job type?")
     type = st.selectbox("", ("Full Time","Part Time","Casual"))
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
@@ -26,7 +26,7 @@ def work_time_everyday():
     # st.session_state['worktime_End'] -> The end time
     # st.session_state['Lunch_breack'] -> The break time / lunch time
 
-    st.title("What's your worktime of everyday?")
+    st.title("Please enter your daily working Start time and End time")
     worktime_Start = st.time_input('Start time', datetime.time(8, 00))
     worktime_End = st.time_input('End time', datetime.time(17, 00))
     Lunch_breack = st.number_input('Lunch break (minutes):',0)
@@ -39,7 +39,7 @@ def work_time_everyday():
              ", and you have", Lunch_breack, "minutes for lunch break.")
 
 def salary():
-    st.title( "What's your salary?")
+    st.title( "Select the payment frequency you want to calculate?")
     salary_type = st.radio(
        "",
         key="visibility",
@@ -68,4 +68,5 @@ def worktime():
     st.session_state['worktime'] = worktime
     st.write("What's your worktime:", worktime[0], "to", worktime[1])
 
-
+def penalty_input():
+    pass 
