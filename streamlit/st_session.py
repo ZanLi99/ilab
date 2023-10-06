@@ -30,11 +30,11 @@ def initialize_st():
     if 'salary_type' not in st.session_state:
         st.session_state['salary_type'] = []
 
-    st.session_state['awards'] = pd.read_csv('./streamlit/awards.csv')
+    st.session_state['awards'] = pd.read_csv('awards.csv')
     st.session_state['classification'] = classification_clean()
     st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
     st.session_state['selection_class'] = st.session_state['classification']['classification'].drop_duplicates()
-    st.session_state['merged'] = pd.read_csv('./streamlit/merge_classification_penalty.csv')
+    st.session_state['merged'] = pd.read_csv('merge_classification_penalty.csv')
 
     if 'classification_annual_rate' not in st.session_state:
         st.session_state['classification_annual_rate'] = []
@@ -44,7 +44,7 @@ def initialize_st():
         st.session_state['user_salary'] = []
 
 def classification_clean():
-    classification = pd.read_csv('./streamlit/classification.csv')
+    classification = pd.read_csv('classification.csv')
     classification['classification'] = classification['classification'].astype(str)
     classification['classification'] = classification['classification'].str.lower()
     classification.dropna(subset=['base_rate','base_pay_rate_id','base_rate_type'], axis=0, inplace=True)

@@ -48,3 +48,9 @@ public_holidays = json.loads(response.content)
 
 for public_holiday in public_holidays:
     print(public_holiday['date'])
+
+response = requests.get('https://date.nager.at/api/v3/AvailableCountries')
+AvailableCountries = json.loads(response.content)
+
+for Countries in AvailableCountries:
+    print(Countries['countryCode'], Countries['name'])
