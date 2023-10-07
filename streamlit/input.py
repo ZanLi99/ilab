@@ -5,7 +5,7 @@ import datetime
 def choosecountry():
     # select country
     st.title("Where are you from?")
-    user_country = st.selectbox("", st.session_state['country']['name'])
+    user_country = st.selectbox("", st.session_state['country']['name'],index=4)
     st.session_state['user_country'] = st.session_state['country'][st.session_state['country']['name'] == user_country]['countryCode']
     #st.write(st.session_state['user_country'].values)
 
@@ -26,6 +26,13 @@ def work_type():
     type = st.selectbox("", ("Full Time","Part Time","Casual"))
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
+    if type == 'Full Time':
+        st.image("./Pictures/Full.png", use_column_width=True)
+    if type == 'Part Time':
+        st.image("./Pictures/Part.jpg", use_column_width=True)
+    if type == 'Casual':
+        st.image("./Pictures/Casual.jpg", use_column_width=True)
+    
 
 def work_time_everyday():
     # The interface of input user's worktime of everyday
