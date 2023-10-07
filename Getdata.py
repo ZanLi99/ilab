@@ -4,6 +4,7 @@ import numpy as np
 from API import get_awards,get_data,get_holiday, hoilday_country
 import json
 import os
+from data_processing import classification_clean()
 
 # allowance: wage-allowances
 # classification: classifications
@@ -187,20 +188,7 @@ def get_country():
     country.to_csv('./streamlit/country.csv', index=False)
     return country
 
-def get_holiday():
-    csv_file_path = "./streamlit/country.csv"
-    flag = False
-    if os.path.exists(csv_file_path):   
-        df = pd.read_csv(csv_file_path)  
-        if "countryCode" in df.columns:
-            flag = True
-    if flag == False:
-        get_country()
-    if flag == True:
-        print(df['countryCode'])
 
-
-get_holiday()
 
 # awards()
 # classification()
@@ -210,6 +198,7 @@ get_holiday()
 #clauseID()
 # merge_classification_penalty()
 # get_country()
+# classification_clean()
  
 
 

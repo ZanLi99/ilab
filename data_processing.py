@@ -21,5 +21,8 @@ def classification_clean():
 
     max_versions = classification.groupby(['classification','employee_rate_type_code'])['version_number'].max().reset_index()
     result = classification.merge(max_versions, on=['classification', 'version_number'])
-
+    result.to_csv('./streamlit/classification.csv')
     return result
+
+#cleaning()
+#classification_clean()
