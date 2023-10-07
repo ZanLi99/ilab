@@ -4,7 +4,7 @@ import numpy as np
 from API import get_awards,get_data,get_holiday, hoilday_country
 import json
 import os
-from data_processing import classification_clean()
+from data_processing import classification_clean
 
 # allowance: wage-allowances
 # classification: classifications

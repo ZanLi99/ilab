@@ -32,10 +32,13 @@ def select_class():
 
 def calculate_penalty():
     if st.session_state['user_input']:
-        filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['input'], case=False)]
+        filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['user_input'], case=False)]
         average_rate = filtered_df['rate'].mean()
-        st.session_state['penalty_rate'] = average_rate
-        st.write(st.session_state['penalty_rate'])
+        if average_rate:
+            st.session_state['penalty_rate'] = average_rate
+        else:
+            st.session_state['penalty_rate'] = 100
+        #st.write(st.session_state['penalty_rate'])
 
 
 
@@ -263,3 +266,25 @@ def calculate_weekend():
             st.write(f"Your have worked {number} days at weekend")
             st.session_state['select_weekend'] = number
 
+def calculate_salary():
+    if len(st.session_state['worktime']) >=2:
+
+        start_date = st.session_state['worktime'][0]
+        end_date = st.session_state['worktime'][1]
+        worktime_Start = st.session_state['worktime_Start'] 
+        worktime_End = st.session_state['worktime_End'] 
+        count_weekend_days = 0
+        current_date = start_date
+        while current_date <= end_date:
+            if current_date.weekday() == 5 or current_date.weekday() == 6:
+                count_weekend_days += 1
+            current_date += timedelta(days=1)
+        days = (end_date - start_date).days - count_weekend_days+st.session_state['select_weekend']
+
+        time_difference = datetime.combine(datetime.min, worktime_End) - datetime.combine(datetime.min, worktime_Start)
+        hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
+        final_salary = round(days * hours * st.session_state['User_salary']*st.session_state['penalty_rate']/100)
+        st.write(final_salary)
+        st.session_state['final_salary'] = final_salary
+        #st.write(st.session_state['penalty_rate'])
+        
