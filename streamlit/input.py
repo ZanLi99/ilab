@@ -2,6 +2,13 @@ import streamlit as st
 import datetime
 
 
+def choosecountry():
+    # select country
+    st.title("Where are you from?")
+    user_country = st.selectbox("", st.session_state['country']['name'])
+    st.session_state['user_country'] = st.session_state['country'][st.session_state['country']['name'] == user_country]['countryCode']
+    #st.write(st.session_state['user_country'].values)
+
 def inputjob():
     # The interface of input user's job
     # st.session_state['user_input'] -> Save the job of inputting
@@ -66,7 +73,11 @@ def worktime():
         format="MM.DD.YYYY",
     )
     st.session_state['worktime'] = worktime
-    st.write("What's your worktime:", worktime[0], "to", worktime[1])
+    if len(worktime) >= 2 and worktime[0] and worktime[1]:
+        st.write("What's your worktime:", worktime[0], "to", worktime[1])
+
+
+
 
 def penalty_input():
     pass 

@@ -1,5 +1,6 @@
 import requests
 import urllib.request, json
+import json
 
 
 def get_awards(page, limit):
@@ -40,17 +41,13 @@ def get_data(awardcode, parameter, page, limit):
         return(e)
 
     
-import json
-import requests
 
-response = requests.get('https://date.nager.at/api/v3/publicholidays/2023/AU')
-public_holidays = json.loads(response.content)
+def get_holiday(year, country):
+    response = requests.get(f'https://date.nager.at/api/v3/publicholidays/{year}/{country}')
+    public_holidays = json.loads(response.content)
+    return public_holidays
 
-for public_holiday in public_holidays:
-    print(public_holiday['date'])
-
-response = requests.get('https://date.nager.at/api/v3/AvailableCountries')
-AvailableCountries = json.loads(response.content)
-
-for Countries in AvailableCountries:
-    print(Countries['countryCode'], Countries['name'])
+def hoilday_country():
+    response = requests.get('https://date.nager.at/api/v3/AvailableCountries')
+    AvailableCountries = json.loads(response.content)
+    return AvailableCountries

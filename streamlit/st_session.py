@@ -13,7 +13,7 @@ def initialize_st():
         st.session_state['current_rate_type'] = []
     # ---------
     if 'user_salary' not in st.session_state:
-        st.session_state['user_salary'] = []
+        st.session_state['user_salary'] = 0
     # ---------
     if 'worktime' not in st.session_state:
         st.session_state['worktime'] = []
@@ -29,7 +29,14 @@ def initialize_st():
         st.session_state['User_salary'] = []
     if 'salary_type' not in st.session_state:
         st.session_state['salary_type'] = []
+    if 'user_country' not in st.session_state:
+        st.session_state['user_country'] = []
+    if 'holiday' not in st.session_state:
+        st.session_state['holiday'] = []
+    if 'select_weekend' not in st.session_state:
+        st.session_state['select_weekend'] = 0
 
+    st.session_state['country'] = pd.read_csv('country.csv')
     st.session_state['awards'] = pd.read_csv('awards.csv')
     st.session_state['classification'] = classification_clean()
     st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)

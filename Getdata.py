@@ -1,7 +1,7 @@
 # Create a new DataFrame to save the dataset
 import pandas as pd
 import numpy as np
-from API import get_awards,get_data
+from API import get_awards,get_data,get_holiday, hoilday_country
 import json
 import os
 
@@ -22,8 +22,8 @@ def awards():
         results = data.get('results', [])
         for result in results:
             temp.append(result)
-    temp = pd.DataFrame(temp)
-    temp.to_csv('./streamlit/awards.csv', index=False)
+        temp = pd.DataFrame(temp)
+        temp.to_csv('./streamlit/awards.csv', index=False)
     return temp
 
 
@@ -51,8 +51,8 @@ def classification():
                 for result in results:
                     temp.append(result)
                   
-    temp = pd.DataFrame(temp)
-    temp.to_csv('./streamlit/classification.csv', index=False)
+        temp = pd.DataFrame(temp)
+        temp.to_csv('./streamlit/classification.csv', index=False)
     return temp
 
 def penalty():
@@ -78,8 +78,8 @@ def penalty():
                 for result in results:
                     temp.append(result)
                     
-    temp = pd.DataFrame(temp)
-    temp.to_csv('./streamlit/penalty.csv', index=False)
+        temp = pd.DataFrame(temp)
+        temp.to_csv('./streamlit/penalty.csv', index=False)
     return temp
 
 def ex_allowance():
@@ -105,8 +105,8 @@ def ex_allowance():
                 for result in results:
                     temp.append(result)
                     
-    temp = pd.DataFrame(temp)
-    temp.to_csv('./streamlit/expense-allowance.csv', index=False)
+        temp = pd.DataFrame(temp)
+        temp.to_csv('./streamlit/expense-allowance.csv', index=False)
     return temp
 
 def allowance():
@@ -132,8 +132,8 @@ def allowance():
                 for result in results:
                     temp.append(result)
                     
-    temp = pd.DataFrame(temp)
-    temp.to_csv('./streamlit/allowance.csv', index=False)
+        temp = pd.DataFrame(temp)
+        temp.to_csv('./streamlit/allowance.csv', index=False)
     return temp
 
 # def clauseID():
@@ -181,14 +181,35 @@ def merge_classification_penalty():
     merged_df.dropna(subset=["base_pay_rate_id"], axis=0, inplace=True)
     merged_df.to_csv('./streamlit/merge_classification_penalty.csv', index=False)
 
+def get_country():
+    country = hoilday_country()
+    country = pd.DataFrame(country)
+    country.to_csv('./streamlit/country.csv', index=False)
+    return country
+
+def get_holiday():
+    csv_file_path = "./streamlit/country.csv"
+    flag = False
+    if os.path.exists(csv_file_path):   
+        df = pd.read_csv(csv_file_path)  
+        if "countryCode" in df.columns:
+            flag = True
+    if flag == False:
+        get_country()
+    if flag == True:
+        print(df['countryCode'])
+
+
+get_holiday()
+
 # awards()
 # classification()
 # penalty()
 # ex_allowance()
 # allowance()
 #clauseID()
-merge_classification_penalty()
-
+# merge_classification_penalty()
+# get_country()
  
 
 
