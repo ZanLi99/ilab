@@ -236,6 +236,7 @@ def chooseholiday():
         checkbox = st.checkbox(f"{row['name']} ({row['localName']}) on {row['date']}")
         if checkbox:
             selected_rows.append(row)
+    st.session_state['holiday_number'] = (len(selected_rows))
 
     # if selected_rows:
     #     df = pd.DataFrame(selected_rows)
@@ -256,7 +257,7 @@ def calculate_weekend():
             if current_date.weekday() == 5 or current_date.weekday() == 6:
                 count_weekend_days += 1
             current_date += timedelta(days=1)
-        st.write(f"There are {count_weekend_days} days of weekend")
+        st.write(f"There are {count_weekend_days} days of weekend except public holiday")
         number = st.number_input("How many days did you worked at weekend?", value=0)
         if number > count_weekend_days:
             st.write(f"There are only {count_weekend_days} days of weekend, please input again")
@@ -283,8 +284,21 @@ def calculate_salary():
 
         time_difference = datetime.combine(datetime.min, worktime_End) - datetime.combine(datetime.min, worktime_Start)
         hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
-        final_salary = round(days * hours * st.session_state['User_salary']*st.session_state['penalty_rate']/100)
-        st.write(final_salary)
+        
+        salary = round(((end_date - start_date).days + 1 - count_weekend_days) *st.session_state['User_salary'])
+        penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number']))
+        final_salary = round(salary+penalty)
+        
+        sizes = [salary,penalty]
+        labels = ['Basic salery','penalty']
+        fig, ax = plt.subplots(figsize=(6, 6)) 
+        ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
+        ax.axis('equal')  
+        legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+        ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
+
+        ax.set_title('Combination of salary') 
+        st.pyplot(fig)
         st.session_state['final_salary'] = final_salary
         #st.write(st.session_state['penalty_rate'])
         
