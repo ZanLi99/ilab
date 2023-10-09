@@ -8,6 +8,11 @@ st.set_page_config(page_title='WageCraft Hospitality Award')
 
 st.header('WageCraft Hospitality Wage Calculator', divider='gray')
 st.subheader('Input Job information')
+
+st.subheader('These are some examples of jobs that are covered under this award')
+st.write('- waiters and waitresses')
+st.write('- kitchen hands')
+
 Adult_minimum_rate_weekly = {
     'Introductory': 859.30,
     'level_1': 882.80,
@@ -17,16 +22,47 @@ Adult_minimum_rate_weekly = {
     'level_5': 1057.40,
     'level_6': 1085.60
 }
-level = st.selectbox('What is your job level', Adult_minimum_rate_weekly)
 
+
+job_level_info = {
+    'Introductory': 'Introductory level is for an employee who enters the hospitality industry and does not demonstrate the competency requirements of level 1. The employee remains at Introductory level for up to 3 months while undertaking appropriate training and being assessed for competency to move to level 1. At the end of that period, the employee moves to level 1 unless the employee and the employer mutually agree that further training of up to 3 months is required for the employee to achieve the necessary competency.',
+    'level_1': 'Level 1 involves employees in any of the following activities: picking up glasses - emptying ashtrays - removing food plates -setting and wiping down tablescleaning - tidying associated areas',
+    'level_2': 'Level 2 involves someone who is engaged in any of the following: handling liqueor, recieving money, attending a snack bar, delivery duties, taking reservations, greeting and seeating guests, undertaking',
+    'level_3': 'Level 3 involves someone who does level 2 taks along side any of the following, operating a mechanical lifting device, attending a terminal, full control of liquor store, mixing drinks, training or supervising employees of a lower grade',
+    'level_4': 'Level 4 involves an employee who has completed an an apprenticeship or carries out specialised skilled duties ina fine dinging room/restaurant',
+    'level_5': 'level 5 involves a appropriate level of training and is responsible for supervision, training and co-ordination of food and beverage of one or more bars',
+    'level_6': 'level 6 involves you being a chef'
+
+
+}
+
+Eployee_type_info = {
+    'Full time' : 'Full time employees are people that work 38 ordinary hours a week and are a full time employee',
+    'Part time' : 'A part time employee has to work between 8 to 38 hours a week and has reasonably predicatble hours of work',
+    'Casual'  : 'A casual employee works irregular hours and has no guarantee of work '
+
+
+}
+
+
+level = st.selectbox('What is your job level', Adult_minimum_rate_weekly)
+st.write(job_level_info[level])
 input_job_type = ['Casual', 'Part time', 'Full time']
 job_type = st.selectbox('What is your employment type', input_job_type)
+st.write(Eployee_type_info[job_type])
+
 st.subheader('Input Day of Work Information')
 age = st.number_input('How old are you in years')
 d = st.date_input("What is the date of the day you worked ", datetime.date(2023, 9, 18))
 time_1 = st.time_input('What time did you start work', step=3600, key='time_1')
 time_2 = st.time_input(
     'What time did you finish that work', step=3600, key='time_2')
+
+break_1 = st.checkbox('Did you have a break this shift', key = 'break_1')
+
+
+
+
 def combine_time_seconds(time_1, date_1, time_2, date_2):
     date = datetime.datetime.combine(date_1, time_1)
     date_2 = datetime.datetime.combine(date_2, time_2)
@@ -57,7 +93,6 @@ def junior_employee_payment(age):
         percent_rate = 0.85
     else :
         percent_rate = 1
-    print(percent_rate)
     return percent_rate
 
 def junior_employee_office_payment(age):
@@ -74,14 +109,13 @@ def junior_employee_office_payment(age):
         percent_rate = 0.90
     else:
         percent_rate = 1
-    print(percent_rate)
     return percent_rate
 
 junior_employee_office_payment(17.8)
 flat_increase = []
 percent_increase = []
 
-
+total_hours = int
 def penelty_rate_hours(time_1, date_1, time_2, date_2):
     initial_date = datetime.datetime.combine(date_1, time_1)
     final_date = datetime.datetime.combine(date_2, time_2)
@@ -89,28 +123,45 @@ def penelty_rate_hours(time_1, date_1, time_2, date_2):
         final_date.year, final_date.month, final_date.day, 7)
     date_7pm = datetime.datetime(
         final_date.year, final_date.month, final_date.day, 7)
+    len_hours = final_date - initial_date
+    len_hours = (len_hours.seconds)/3600
 
     if initial_date.weekday() == 6:
-        len_hours = final_date - initial_date
-        len_hours = (len_hours.seconds)/3600
         percent_increase.append(0.75)
     elif initial_date.weekday() == 5:
-        len_hours = final_date - initial_date
-        len_hours = (len_hours.seconds)/3600
         percent_increase.append(len_hours * 0.5)
     elif initial_date < date_7am < final_date or final_date < date_7am:
-        len_early = date_7am - initial_date
-        len_early = (len_early.seconds)/3600
-        flat_increase.append(len_early * 3.93)
+        flat_increase.append(len_hours * 3.93)
     elif final_date > date_7am > initial_date or initial_date > date_7pm:
-        len_late = date_7am - final_date
-        len_late = (len_late.seconds)/3600
-        flat_increase.append(len_late * 2.62)
+        flat_increase.append(len_hours * 2.62)
     else:
         pass
 
+    penelty_rate_hours.total_hours = len_hours 
+
+break_taken = []
+
+def break_inputs():
+    if 5 < penelty_rate_hours.total_hours < 6 & break_1 == True:
+        st.write('For a shift between 5-6 hours long you are entitled to a  30 minute unpaid meal break')
+    if 5 < penelty_rate_hours.total_hours < 6 & break_1 == False:
+        st.write('For a shift between 5-6 hours long you are entitled to a  30 minute unpaid meal break ')
+    if 6 < penelty_rate_hours.total_hours < 8 & break_1 == True:
+        st.write('for a shift between 6-8 hours long you are entitled to a 30 minute unpaid meal break between the 2nd hour and 6th hour of the shift')
+    if 6 < penelty_rate_hours.total_hours < 8 & break_1 == False:
+        st.write('for a shift between 6-8 hours long you are entitled to a 30 minute unpaid meal break between the 2nd hour and 6th hour of the shift')
+    if 8 < penelty_rate_hours.total_hours < 10 & break_1 == True:
+        st.write('for a shift between 8-10 hours long you are entitled to a 30 minute unpaid meal break between the 2nd hour and 6th hour of the shift and 1 20 minute paid break or 2 10 minute paid breaks')
+    if 8 < penelty_rate_hours.total_hours < 10 & break_1 == False:
+        st.write('for a shift between 8-10 hours long you are entitled to a 30 minute unpaid meal break between the 2nd hour and 6th hour of the shift and 1 20 minute paid break or 2 10 minute paid breaks')
+    if penelty_rate_hours.total_hours > 10 & break_1 == True:
+        st.write('for a shift between 8-10 hours long you are entitled to a 30 minute unpaid meal break between the 2nd hour and 6th hour of the shift 2 20 minute paid breaks')
+    if penelty_rate_hours.total_hours > 10 & break_1 == False:
+        st.write('for a shift between 8-10 hours long you are entitled to a 30 minute unpaid meal break between the 2nd hour and 6th hour of the shift 2 20 minute paid breaks')
 
 penelty_rate_hours(time_1, d, time_2, d)
+break_inputs()
+
 age_penelty = junior_employee_payment(age)
 test = age_penelty * test
 base_res = (test * Adult_minimum_rate_weekly[level])/38
