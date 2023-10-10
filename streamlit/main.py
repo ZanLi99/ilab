@@ -1,5 +1,7 @@
 import streamlit as st
 import datetime
+import matplotlib.pyplot as plt
+
 import pandas as pd
 from st_session import initialize_st
 from model import filter_job
@@ -7,6 +9,7 @@ from function import select_class, select_rate_type, base_rate, calculate_penalt
 from input import inputjob,worktime,work_type,work_time_everyday,salary,choosecountry,part_time_input,salary_type
 from PIL import Image
 import random
+
 
 from streamlit_chat import message
 
@@ -224,7 +227,16 @@ elif page == "Page 2":
     st.write('You are receiving ', f'${casual_bonus}' ' for being a casual employee')
     df.columns = ['pay', 'type of bonus']
     df = df[df.pay > 0]
-    st.bar_chart(data=df, y='pay', x='type of bonus')
+    #st.bar_chart(data=df, y='pay', x='type of bonus')
+    plt.figure(figsize=(8, 6))
+    plt.bar(df['type of bonus'], df['pay'])
+    plt.xlabel('Type of Bonus')
+    plt.ylabel('Pay')
+    plt.title('Bonus Distribution')
+    plt.xticks(rotation=45)  # 可选：旋转 x 轴标签，以适应较长的标签
+
+    # 显示 Matplotlib 图形在 Streamlit 中
+    st.pyplot(plt)
 
 
         
