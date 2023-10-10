@@ -8,7 +8,7 @@ def initialize_st():
     if 'current_class' not in st.session_state:
         st.session_state['current_class'] = []
     if 'penalty_rate' not in st.session_state:
-        st.session_state['penalty_rate'] = []
+        st.session_state['penalty_rate'] = 150
     if 'current_rate_type' not in st.session_state:
         st.session_state['current_rate_type'] = []
     # ---------
@@ -35,6 +35,10 @@ def initialize_st():
         st.session_state['holiday'] = []
     if 'select_weekend' not in st.session_state:
         st.session_state['select_weekend'] = 0
+    if 'part_time_list' not in st.session_state:
+        st.session_state['part_time_list'] = []
+    if 'part_time_day' not in st.session_state:
+        st.session_state['part_time_day'] = []
 
     st.session_state['country'] = pd.read_csv('country.csv')
     st.session_state['awards'] = pd.read_csv('awards.csv')

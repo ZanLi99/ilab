@@ -1,5 +1,6 @@
 import streamlit as st
 import datetime
+import matplotlib.pyplot as plt
 
 
 def choosecountry():
@@ -84,7 +85,41 @@ def worktime():
         st.write("What's your worktime:", worktime[0], "to", worktime[1])
 
 
+def part_time_input():
+    d = st.date_input("When did you work?", datetime.date.today())
+    number = st.number_input("input work hours", value=0)
+    if st.button("A new day"):
+        st.session_state['part_time_list'].append(number)
+        st.session_state['part_time_day'].append(d)
+    for i in range(0,len(st.session_state['part_time_list'])):
+        st.write('You worked', st.session_state['part_time_list'][i],'at',st.session_state['part_time_day'][i])
+    
+    weekend_dates = []
+    for index, date in enumerate(st.session_state['part_time_day']):
+        if date.weekday() == 5 or date.weekday() == 6: 
+            weekend_dates.append(index)
+    #st.write(weekend_dates)
+    sum_hours_holiday = 0
+    if weekend_dates:
+        for i in weekend_dates:
+            sum_hours_holiday += st.session_state['part_time_list'][i]
+    sum_hours = sum(st.session_state['part_time_list']) - sum_hours_holiday
+    st.write('You worked total',sum_hours,'and there are',sum_hours_holiday,'hours in holiday')
+    sum_salary = round(st.session_state['User_salary'] * sum_hours)
+    sum_holiday = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * sum_hours_holiday)
+    #st.write(st.session_state['User_salary'],st.session_state['penalty_rate'])
+    #st.write(sum_salary + sum_holiday)
+    if salary != 0 :
+            sizes = [sum_salary,sum_holiday]
+            labels = ['Basic salery','penalty']
+            fig, ax = plt.subplots(figsize=(6, 6)) 
+            ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
+            ax.axis('equal')  
+            legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+            ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
 
+            ax.set_title('Combination of salary') 
+            st.pyplot(fig)
 
 def penalty_input():
     pass 
