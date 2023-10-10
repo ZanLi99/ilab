@@ -40,12 +40,12 @@ def initialize_st():
     if 'part_time_day' not in st.session_state:
         st.session_state['part_time_day'] = []
 
-    st.session_state['country'] = pd.read_csv('country.csv')
-    st.session_state['awards'] = pd.read_csv('awards.csv')
-    st.session_state['classification'] = pd.read_csv('classification.csv')
+    st.session_state['country'] = pd.read_csv('./country.csv')
+    st.session_state['awards'] = pd.read_csv('./awards.csv')
+    st.session_state['classification'] = pd.read_csv('./classification.csv')
     st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
     st.session_state['selection_class'] = st.session_state['classification']['classification'].drop_duplicates()
-    st.session_state['merged'] = pd.read_csv('merge_classification_penalty.csv')
+    st.session_state['merged'] = pd.read_csv('./merge_classification_penalty.csv')
 
     if 'classification_annual_rate' not in st.session_state:
         st.session_state['classification_annual_rate'] = []
