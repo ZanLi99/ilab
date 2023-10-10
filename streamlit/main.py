@@ -2,7 +2,7 @@ import streamlit as st
 from st_session import initialize_st
 from model import filter_job
 from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime,get_holiday_df,chooseholiday,calculate_weekend,calculate_salary
-from input import inputjob,worktime,work_type,work_time_everyday,salary,choosecountry,part_time_input
+from input import inputjob,worktime,work_type,work_time_everyday,salary,choosecountry,part_time_input,salary_type
 from PIL import Image
 import random
 
@@ -13,21 +13,24 @@ initialize_st()
 choosecountry()
 
 inputjob()
-work_type()
+type = work_type()
 
-salary()
-work_time_everyday()
-worktime()
 
-get_holiday_df()
-chooseholiday()
-
-calculate_weekend()
-calculate_penalty()
-calculate_salary()
-part_time_input()
+if type == 'Full Time':
+    salary_type()
+    salary()
+    work_time_everyday()
+    worktime()
+    get_holiday_df()
+    chooseholiday() 
+    calculate_weekend()
+    calculate_penalty()
+    calculate_salary()
+if type == 'Part Time':
+    salary()
+    part_time_input()
        
-#select_class()
+# select_class()
 
 
 #calculate_penalty()

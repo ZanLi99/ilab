@@ -33,6 +33,7 @@ def work_type():
         st.image("./Pictures/Part.jpg", use_column_width=True)
     if type == 'Casual':
         st.image("./Pictures/Casual.jpg", use_column_width=True)
+    return type
     
 
 def work_time_everyday():
@@ -53,7 +54,7 @@ def work_time_everyday():
     st.write('Your worktime:', worktime_Start, "to", worktime_End,
              ", and you have", Lunch_breack, "minutes for lunch break.")
 
-def salary():
+def salary_type():
     st.title( "Select the payment frequency you want to calculate?")
     salary_type = st.radio(
        "",
@@ -62,6 +63,7 @@ def salary():
     )
     st.session_state['salary_type'] = salary_type
 
+def salary():
     User_salary = st.number_input("Your salary:",0)
     st.session_state['User_salary'] = User_salary
 
@@ -109,7 +111,7 @@ def part_time_input():
     sum_holiday = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * sum_hours_holiday)
     #st.write(st.session_state['User_salary'],st.session_state['penalty_rate'])
     #st.write(sum_salary + sum_holiday)
-    if salary != 0 :
+    if sum_salary != 0 or sum_holiday != 0:
             sizes = [sum_salary,sum_holiday]
             labels = ['Basic salery','penalty']
             fig, ax = plt.subplots(figsize=(6, 6)) 
