@@ -7,12 +7,6 @@ import requests
 import json
 
 
-import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
-
-
 
 
 def select_class():
