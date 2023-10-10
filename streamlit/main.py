@@ -230,9 +230,7 @@ elif page == "Page 2":
     plt.xlabel('Type of Bonus')
     plt.ylabel('Pay')
     plt.title('Bonus Distribution')
-    plt.xticks(rotation=45)  # 可选：旋转 x 轴标签，以适应较长的标签
-
-    # 显示 Matplotlib 图形在 Streamlit 中
+    plt.xticks(rotation=45)  
     st.pyplot(plt)
 
 
