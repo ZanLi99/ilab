@@ -40,7 +40,6 @@ if page == "Page 1":
         part_time_input()
 
 elif page == "Page 2":
-    # 显示第二页的内容
     st.header("Page 2")
     #st.header("WageCraft Hospitality Award")
     #st.set_page_config(page_title='WageCraft Hospitality Award')
