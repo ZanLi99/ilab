@@ -7,11 +7,11 @@ st.set_page_config(page_title='WageCraft Hospitality Award')
 
 
 st.header('WageCraft Hospitality Wage Calculator', divider='gray')
-st.subheader('Input Job information')
-
-st.subheader('These are some examples of jobs that are covered under this award')
-st.write('- waiters and waitresses')
-st.write('- kitchen hands')
+st.subheader('Industries covered by this award include')
+st.write('- Tourist accomodations')
+st.write('- Restaurancts and convention facilities')
+st.write('- nightclubs, function areas')
+st.subheader('Enter Job Information')
 
 Adult_minimum_rate_weekly = {
     'Introductory': 859.30,
@@ -85,10 +85,9 @@ Job_information = {
 }
 
 stream = st.selectbox('What stream are you part of', employment_stream)
-job_type_2 = st.selectbox('job_type',Job_information[stream] )
+job_type_2 = st.selectbox('Job Type',Job_information[stream] )
 st.write('This is some of what you are expected to do in this role')
 st.write(Job_information[stream][job_type_2][0])
-st.write(Job_information[stream][job_type_2][1])
 input_job_type = ['Casual', 'Part time', 'Full time']
 job_type = st.selectbox('What is your employment type', input_job_type)
 st.write(Eployee_type_info[job_type])
@@ -100,9 +99,6 @@ time_2 = st.time_input(
     'What time did you finish that work', step=3600, key='time_2')
 
 break_1 = st.checkbox('Did you have a break this shift', key = 'break_1')
-
-
-
 
 def combine_time_seconds(time_1, date_1, time_2, date_2):
     date = datetime.datetime.combine(date_1, time_1)
