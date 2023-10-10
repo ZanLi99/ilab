@@ -1,0 +1,13 @@
+matplotlib==3.4.3
+
+numpy==1.25.2
+
+pandas==2.1.0
+
+seaborn==0.12.2.
+
+streamlit==1.27.2
+
+requests==2.31.0
+
+streamlit_chat==0.1.1
