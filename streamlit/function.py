@@ -35,9 +35,9 @@ def calculate_penalty():
         filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['user_input'], case=False)]
         average_rate = filtered_df['rate'].mean()
         if average_rate:
-            st.session_state['penalty_rate'] = average_rate
+            st.session_state['penalty_rate'] = round(average_rate)
         else:
-            st.session_state['penalty_rate'] = 100
+            st.session_state['penalty_rate'] = 150
         #st.write(st.session_state['penalty_rate'])
 
 
@@ -286,19 +286,20 @@ def calculate_salary():
         hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
         
         salary = round(((end_date - start_date).days + 1 - count_weekend_days) *st.session_state['User_salary'])
-        penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number']))
-        final_salary = round(salary+penalty)
+        if salary != 0 :
+            penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number']))
+            final_salary = round(salary+penalty)
         
-        sizes = [salary,penalty]
-        labels = ['Basic salery','penalty']
-        fig, ax = plt.subplots(figsize=(6, 6)) 
-        ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
-        ax.axis('equal')  
-        legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
-        ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
+            sizes = [salary,penalty]
+            labels = ['Basic salery','penalty']
+            fig, ax = plt.subplots(figsize=(6, 6)) 
+            ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
+            ax.axis('equal')  
+            legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+            ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
 
-        ax.set_title('Combination of salary') 
-        st.pyplot(fig)
-        st.session_state['final_salary'] = final_salary
+            ax.set_title('Combination of salary') 
+            st.pyplot(fig)
+            st.session_state['final_salary'] = final_salary
         #st.write(st.session_state['penalty_rate'])
         
