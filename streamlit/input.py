@@ -94,7 +94,7 @@ def part_time_input():
         st.session_state['part_time_list'].append(number)
         st.session_state['part_time_day'].append(d)
     for i in range(0,len(st.session_state['part_time_list'])):
-        st.write('You worked', st.session_state['part_time_list'][i],'at',st.session_state['part_time_day'][i])
+        st.write('You worked', st.session_state['part_time_list'][i],'hours at',st.session_state['part_time_day'][i])
     
     weekend_dates = []
     for index, date in enumerate(st.session_state['part_time_day']):
@@ -106,7 +106,7 @@ def part_time_input():
         for i in weekend_dates:
             sum_hours_holiday += st.session_state['part_time_list'][i]
     sum_hours = sum(st.session_state['part_time_list']) - sum_hours_holiday
-    st.write('You worked total',sum_hours,'and there are',sum_hours_holiday,'hours in holiday')
+    st.write('You worked total',sum_hours,'hours and there are',sum_hours_holiday,'hours in holiday')
     sum_salary = round(st.session_state['User_salary'] * sum_hours)
     sum_holiday = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * sum_hours_holiday)
     #st.write(st.session_state['User_salary'],st.session_state['penalty_rate'])
@@ -120,7 +120,7 @@ def part_time_input():
             legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
             ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
 
-            ax.set_title('Combination of salary') 
+            ax.set_title('Combination of part-time salary') 
             st.pyplot(fig)
 
 def penalty_input():
