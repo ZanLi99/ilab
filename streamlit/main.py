@@ -26,7 +26,7 @@ initialize_st()
     #st.header("penalty")
 page = st.sidebar.selectbox("Select Page", ["Salary", "WageCraft Hospitality Award"])
 
-if page == "Salary":
+if page == "Salary" or page == "Casual":
     st.header("Salary")
     choosecountry()
     inputjob()
