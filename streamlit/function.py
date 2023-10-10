@@ -7,12 +7,6 @@ import requests
 import json
 
 
-import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
-
-
 
 
 def select_class():
@@ -34,7 +28,7 @@ def calculate_penalty():
     if st.session_state['user_input']:
         filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['user_input'], case=False)]
         average_rate = filtered_df['rate'].mean()
-        if average_rate:
+        if not pd.isna(average_rate):
             st.session_state['penalty_rate'] = round(average_rate)
         else:
             st.session_state['penalty_rate'] = 150
