@@ -18,10 +18,10 @@ initialize_st()
 
 #with tab1:
     #st.header("penalty")
-page = st.sidebar.selectbox("Select Page", ["Page 1", "Page 2"])
+page = st.sidebar.selectbox("Select Page", ["Salary", "WageCraft Hospitality Award"])
 
-if page == "Page 1":
-    st.header("Page 1")
+if page == "Salary":
+    st.header("Salary")
     choosecountry()
     inputjob()
     type = work_type()
@@ -39,8 +39,8 @@ if page == "Page 1":
         salary()
         part_time_input()
 
-elif page == "Page 2":
-    st.header("Page 2")
+elif page == "WageCraft Hospitality Award":
+    st.header("WageCraft Hospitality Award")
     #st.header("WageCraft Hospitality Award")
     #st.set_page_config(page_title='WageCraft Hospitality Award')
 
