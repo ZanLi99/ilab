@@ -9,3 +9,5 @@ seaborn==0.12.2.
 streamlit==1.27.2
 
 requests==2.31.0
+
+streamlit_chat==0.1.1
