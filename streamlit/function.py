@@ -3,13 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from base_rate import base_rate, base_rate_c, base_rate_p
 from datetime import datetime, timedelta
-
-
-
-import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
+import requests
+import json
 
 
 
@@ -31,10 +26,13 @@ def select_class():
 
 def calculate_penalty():
     if st.session_state['user_input']:
-        filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['input'], case=False)]
+        filtered_df = st.session_state['merged'][st.session_state['merged']['classification'].str.contains(st.session_state['user_input'], case=False)]
         average_rate = filtered_df['rate'].mean()
-        st.session_state['penalty_rate'] = average_rate
-        st.write(st.session_state['penalty_rate'])
+        if not pd.isna(average_rate):
+            st.session_state['penalty_rate'] = round(average_rate)
+        else:
+            st.session_state['penalty_rate'] = 150
+        #st.write(st.session_state['penalty_rate'])
 
 
 
@@ -188,6 +186,117 @@ def count_workdays(start_date, end_date):
             current_date += timedelta(days=1)
         return workdays
 
+def get_holiday(year, country):
+    response = requests.get(f'https://date.nager.at/api/v3/publicholidays/{year}/{country}')
+    public_holidays = json.loads(response.content)
+    public_holidays = pd.DataFrame(public_holidays)
+    public_holidays['date'] = pd.to_datetime(public_holidays['date'])
+    public_holidays['date'] = pd.to_datetime(public_holidays['date'])
+    if 'worktime' in st.session_state and len(st.session_state['worktime']) >= 2:
+        start_date = st.session_state['worktime'][0]
+        end_date = st.session_state['worktime'][1]
+        public_holidays['date'] = public_holidays['date'].dt.date
+        public_holidays = public_holidays[(public_holidays['date'] > start_date) & (public_holidays['date'] < end_date)]
+
+    return public_holidays
+
+def get_holiday_df():
+    st.title("Did you work on public holiday or weekend?")
+    if len(st.session_state['worktime']) >=2:
+        if st.session_state['worktime'][0].year != st.session_state['worktime'][1].year:
+            merged_df = pd.concat([get_holiday(st.session_state['worktime'][0].year, st.session_state['user_country'].values[0]),
+                        get_holiday(st.session_state['worktime'][1].year, st.session_state['user_country'].values[0])],
+                      axis=0)
+            merged_df.reset_index(drop=True, inplace=True)
+            if merged_df.empty:
+                st.write('There is no holiday.')
+            else:
+                st.write(merged_df[['date','localName','name']])
+            st.session_state['holiday'] = merged_df
+    if len(st.session_state['worktime']) >=2:
+        if st.session_state['worktime'][0].year == st.session_state['worktime'][1].year:
+            holiday = get_holiday(st.session_state['worktime'][0].year, st.session_state['user_country'].values[0])
+            if holiday.empty:
+                st.write('There is no holiday.')
+            else:
+                st.write(holiday[['date','localName','name']])
+            st.session_state['holiday'] = holiday
+
+def chooseholiday():
+    df = st.session_state['holiday']
+
+    selected_rows = []
+    for index, row in df.iterrows():
+        checkbox = st.checkbox(f"{row['name']} ({row['localName']}) on {row['date']}")
+        if checkbox:
+            selected_rows.append(row)
+    st.session_state['holiday_number'] = (len(selected_rows))
+
+    # if selected_rows:
+    #     df = pd.DataFrame(selected_rows)
+    #     st.write("Selected Rows:")
+    #     st.write(df)
+    #     st.session_state['select_holiday'] = df
+    # else:
+    #     st.write("No rows selected.")
+
+def calculate_weekend():
+    if len(st.session_state['worktime']) >=2:
+
+        start_date = st.session_state['worktime'][0]
+        end_date = st.session_state['worktime'][1]
+        count_weekend_days = 0
+        current_date = start_date
+        while current_date <= end_date:
+            if current_date.weekday() == 5 or current_date.weekday() == 6:
+                count_weekend_days += 1
+            current_date += timedelta(days=1)
+        st.write(f"There are {count_weekend_days} days of weekend except public holiday")
+        number = st.number_input("How many days did you worked at weekend?", value=0)
+        if number > count_weekend_days:
+            st.write(f"There are only {count_weekend_days} days of weekend, please input again")
+            st.write(f"Otherwise, the working days of weekend are {count_weekend_days}")
+            st.session_state['select_weekend'] = count_weekend_days
+        if number != 0 and number < count_weekend_days:
+            st.write(f"Your have worked {number} days at weekend")
+            st.session_state['select_weekend'] = number
+
+def calculate_salary():
+    if len(st.session_state['worktime']) >=2:
+
+        start_date = st.session_state['worktime'][0]
+        end_date = st.session_state['worktime'][1]
+        worktime_Start = st.session_state['worktime_Start'] 
+        worktime_End = st.session_state['worktime_End'] 
+        count_weekend_days = 0
+        current_date = start_date
+        while current_date <= end_date:
+            if current_date.weekday() == 5 or current_date.weekday() == 6:
+                count_weekend_days += 1
+            current_date += timedelta(days=1)
+        days = (end_date - start_date).days - count_weekend_days+st.session_state['select_weekend']
+
+        time_difference = datetime.combine(datetime.min, worktime_End) - datetime.combine(datetime.min, worktime_Start)
+        hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
+        
+        salary = round(((end_date - start_date).days + 1 - count_weekend_days) *st.session_state['User_salary'])
+        if salary != 0 :
+            penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number']))
+            final_salary = round(salary+penalty)
+        
+            sizes = [salary,penalty]
+            labels = ['Basic salery','penalty']
+            fig, ax = plt.subplots(figsize=(6, 6)) 
+            ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
+            ax.axis('equal')  
+            legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+            ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
+
+            ax.set_title('Combination of salary') 
+            st.pyplot(fig)
+            st.session_state['final_salary'] = final_salary
+        #st.write(st.session_state['penalty_rate'])
+        
 
 def calculate_penalty():
     if st.session_state['age'] == "16 years of age and under":
@@ -203,7 +312,4 @@ def calculate_penalty():
 
     salary = st.session_state['User_salary']
     salary = salary * age_rate
-
-
-
 
