@@ -11,6 +11,26 @@ def initialize_st():
         st.session_state['penalty_rate'] = 150
     if 'current_rate_type' not in st.session_state:
         st.session_state['current_rate_type'] = []
+    if 'age' not in st.session_state:
+        st.session_state['age'] = []
+    if 'working_hour_weekday' not in st.session_state:
+        st.session_state['working_hour_weekday'] = []
+    if 'working_hour_weekend' not in st.session_state:
+        st.session_state['working_hour_weekend'] = []
+    if 'working_hour_holiday' not in st.session_state:
+        st.session_state['working_hour_holiday'] = []
+    if 'over_time_weekday_1' not in st.session_state:
+        st.session_state['over_time_weekday_1'] = []
+    if 'over_time_weekday_2' not in st.session_state:
+        st.session_state['over_time_weekday_2'] = []
+    if 'over_time_holiday_1' not in st.session_state:
+        st.session_state['over_time_holiday_1'] = []
+    if 'over_time_holiday_2' not in st.session_state:
+        st.session_state['over_time_holiday_2'] = []
+    if 'over_time_weekend_1' not in st.session_state:
+        st.session_state['over_time_weekend_1'] = []
+    if 'over_time_weekend_2' not in st.session_state:
+        st.session_state['over_time_weekend_2'] = []
     # ---------
     if 'user_salary' not in st.session_state:
         st.session_state['user_salary'] = 0
