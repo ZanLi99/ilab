@@ -9,7 +9,7 @@ from function import select_class, select_rate_type, base_rate, calculate_penalt
 from input import inputjob,worktime,work_type,work_time_everyday,salary,choosecountry,part_time_input,salary_type
 import random
 
-from model import filter_job
+# from model import filter_job
 from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime
 from input import inputjob,worktime,work_type,work_time_everyday,salary, age
 
@@ -281,12 +281,12 @@ elif page == "WageCraft Hospitality Award":
 
 
 
-inputjob()
-work_type()
+# inputjob()
+# work_type()
 age()
-salary()
-work_time_everyday()
-worktime()
+# salary()
+# work_time_everyday()
+# worktime()
 
         
     # select_class()

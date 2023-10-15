@@ -65,6 +65,13 @@ def initialize_st():
         st.session_state['base_rate_type'] = []
     if 'user_salary' not in st.session_state:
         st.session_state['user_salary'] = []
+    if 'pt_worktime_Start' not in st.session_state:
+        st.session_state['pt_worktime_Start'] = []
+    if 'pt_worktime_End' not in st.session_state:
+        st.session_state['pt_worktime_End'] = []
+    if 'overtime_hours' not in st.session_state:
+        st.session_state['overtime_hours'] = 0
+
 
 # def classification_clean():
 #     classification = pd.read_csv('classification.csv')

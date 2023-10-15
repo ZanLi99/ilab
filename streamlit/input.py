@@ -1,7 +1,7 @@
 import streamlit as st
 import datetime
 import matplotlib.pyplot as plt
-
+import plotly.express as px
 
 def choosecountry():
     # select country
@@ -137,13 +137,76 @@ def worktime():
 
 def part_time_input():
     d = st.date_input("When did you work?", datetime.date.today())
-    number = st.number_input("input work hours", value=0)
+    # number = st.number_input("input work hours", value=0)
+    pt_worktime_Start = st.time_input('Start time', datetime.time(8, 00))
+    pt_worktime_End = st.time_input('End time', datetime.time(17, 00))
+
+    st.session_state['pt_worktime_Start'] = pt_worktime_Start
+    st.session_state['pt_worktime_End'] = pt_worktime_End
+
+    start_datetime = datetime.datetime(2000, 1, 1, pt_worktime_Start.hour, pt_worktime_Start.minute)
+    end_datetime = datetime.datetime(2000, 1, 1, pt_worktime_End.hour, pt_worktime_End.minute)
+    time_difference = end_datetime - start_datetime
+    hours_difference = time_difference.total_seconds() / 3600
+
+    # time_difference = datetime.combine(datetime.min, pt_worktime_End) - datetime.combine(datetime.min, pt_worktime_Start)
+    st.write(f"You worked {hours_difference:.2f} hours on {d}.")
+
+
     if st.button("A new day"):
-        st.session_state['part_time_list'].append(number)
+        st.session_state['part_time_list'].append(hours_difference)
         st.session_state['part_time_day'].append(d)
     for i in range(0,len(st.session_state['part_time_list'])):
         st.write('You worked', st.session_state['part_time_list'][i],'hours at',st.session_state['part_time_day'][i])
-    
+
+    # Calculate overtime hours based on a 38-hour workweek
+    total_hours_week = sum(st.session_state.part_time_list)
+    # overtime_hours = max(total_hours_week - 38, 0)
+
+    if st.session_state.part_time_day:
+        # for i in range(1,min(len(st.session_state.part_time_day), 8),  1):
+        #     if abs((st.session_state.part_time_day[0] - st.session_state.part_time_day[-i])).days < 7:
+        #         st.write(st.session_state.part_time_day[-i])
+        #         st.write(st.session_state.part_time_day[0])
+        #         st.write(abs((st.session_state.part_time_day[0] - st.session_state.part_time_day[-i]).days))
+        #         overtime_hours = max(total_hours_week - 38, 0)
+        #         st.session_state['overtime_hours'] = overtime_hours
+        #     else:
+        #         st.write("hi")
+        #         overtime_hours = st.session_state['overtime_hours']
+        #         st.write(st.session_state.part_time_day[-i])
+        #         st.write(st.session_state.part_time_day[0])
+        #         break
+
+        if st.session_state.part_time_day:
+            for i in range(1, min(len(st.session_state.part_time_day), 8), 1):
+                if abs((st.session_state.part_time_day[-1] - st.session_state.part_time_day[-i])).days >= 7:
+                    st.write("hi")
+                    overtime_hours = st.session_state['overtime_hours']
+                    st.write(st.session_state.part_time_day[-i])
+                    st.write(st.session_state.part_time_day[-1])
+                    break
+                else:
+                    st.write(st.session_state.part_time_day[-i])
+                    st.write(st.session_state.part_time_day[-1])
+                    st.write(abs((st.session_state.part_time_day[-1] - st.session_state.part_time_day[-i]).days))
+                    overtime_hours = max(total_hours_week - 38, 0)
+                    st.session_state['overtime_hours'] = overtime_hours
+
+
+        # Calculate additional salary for overtime
+    additional_salary = 0
+    if st.session_state['overtime_hours'] > 0:
+        if overtime_hours <= 2:
+            additional_salary = overtime_hours * 1.5 * st.session_state.User_salary
+        else:
+            additional_salary = 2 * 1.5 * st.session_state.User_salary + (
+                        overtime_hours - 2) * 2.0 * st.session_state.User_salary
+
+    # Display overtime hours and additional salary
+    st.write(f"Overtime hours: {st.session_state['overtime_hours']:.2f} hours.")
+    st.write(f"Additional salary for overtime: ${additional_salary:.2f}")
+
     weekend_dates = []
     for index, date in enumerate(st.session_state['part_time_day']):
         if date.weekday() == 5 or date.weekday() == 6: 
@@ -152,23 +215,35 @@ def part_time_input():
     sum_hours_holiday = 0
     if weekend_dates:
         for i in weekend_dates:
-            sum_hours_holiday += st.session_state['part_time_list'][i]
+            if total_hours_week > 38:
+                sum_hours_holiday += st.session_state['part_time_list'][i] * (
+                            2 - st.session_state['penalty_rate'] / 100)
+            else:
+                sum_hours_holiday += st.session_state['part_time_list'][i]
+
     sum_hours = sum(st.session_state['part_time_list']) - sum_hours_holiday
-    st.write('You worked total',sum_hours,'hours and there are',sum_hours_holiday,'hours in holiday')
+    st.write('You worked total',sum_hours,'hours on weekday and ',sum_hours_holiday,'hours in holiday')
+
+    # Calculate salary components
     sum_salary = round(st.session_state['User_salary'] * sum_hours)
     sum_holiday = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * sum_hours_holiday)
     #st.write(st.session_state['User_salary'],st.session_state['penalty_rate'])
     #st.write(sum_salary + sum_holiday)
+
+    # Calculate total salary
+    total_salary = st.session_state['User_salary'] * total_hours_week + additional_salary + sum_holiday
+    st.write(f"Total salary: ${total_salary:.2f}")
+
     if sum_salary != 0 or sum_holiday != 0:
-            sizes = [sum_salary,sum_holiday]
-            labels = ['Basic salery','penalty']
-            fig, ax = plt.subplots(figsize=(6, 6)) 
+            sizes = [st.session_state['User_salary'] * total_hours_week, additional_salary, sum_holiday]
+            labels = ['Basic Salery','Overtime Penalty', 'Holiday Penalty']
+            fig, ax = plt.subplots(figsize=(6, 6))
             ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
-            ax.axis('equal')  
+            ax.axis('equal')
             legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
             ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
 
-            ax.set_title('Combination of part-time salary') 
+            ax.set_title('Combination of part-time salary')
             st.pyplot(fig)
 
 def penalty_input():
