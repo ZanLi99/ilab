@@ -28,11 +28,11 @@ def work_type():
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
     if type == 'Full Time':
-        st.image("./Pictures/Full.png", use_column_width=True)
+        st.image("./streamlit/Pictures/Full.png", use_column_width=True)
     if type == 'Part Time':
-        st.image("./Pictures/Part.jpg", use_column_width=True)
+        st.image("./streamlit/Pictures/Part.jpg", use_column_width=True)
     if type == 'Casual':
-        st.image("./Pictures/Casual.jpg", use_column_width=True)
+        st.image("./streamlit/Pictures/Casual.jpg", use_column_width=True)
     return type
     
 

@@ -24,13 +24,13 @@ def awards():
         for result in results:
             temp.append(result)
         temp = pd.DataFrame(temp)
-        temp.to_csv('./streamlit/awards.csv', index=False)
+        temp.to_csv('./streamlit/files/awards.csv', index=False)
     return temp
 
 
 # read awardid from awards.csv, if there is no awards.csv, creating it.
 def classification():
-    csv_file_path = "./streamlit/awards.csv"
+    csv_file_path = "./streamlit/files/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -53,11 +53,11 @@ def classification():
                     temp.append(result)
                   
         temp = pd.DataFrame(temp)
-        temp.to_csv('./streamlit/classification.csv', index=False)
+        temp.to_csv('./streamlit/files/classification.csv', index=False)
     return temp
 
 def penalty():
-    csv_file_path = "./streamlit/awards.csv"
+    csv_file_path = "./streamlit/files/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -80,11 +80,11 @@ def penalty():
                     temp.append(result)
                     
         temp = pd.DataFrame(temp)
-        temp.to_csv('./streamlit/penalty.csv', index=False)
+        temp.to_csv('./streamlit/files/penalty.csv', index=False)
     return temp
 
 def ex_allowance():
-    csv_file_path = "./streamlit/awards.csv"
+    csv_file_path = "./streamlit/files/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -107,11 +107,11 @@ def ex_allowance():
                     temp.append(result)
                     
         temp = pd.DataFrame(temp)
-        temp.to_csv('./streamlit/expense-allowance.csv', index=False)
+        temp.to_csv('./streamlit/files/expense-allowance.csv', index=False)
     return temp
 
 def allowance():
-    csv_file_path = "./streamlit/awards.csv"
+    csv_file_path = "./streamlit/files/awards.csv"
     flag = False
     if os.path.exists(csv_file_path):   
         df = pd.read_csv(csv_file_path)  
@@ -134,7 +134,7 @@ def allowance():
                     temp.append(result)
                     
         temp = pd.DataFrame(temp)
-        temp.to_csv('./streamlit/allowance.csv', index=False)
+        temp.to_csv('./streamlit/files/allowance.csv', index=False)
     return temp
 
 # def clauseID():
@@ -160,13 +160,13 @@ def allowance():
 #                 for result in results:
 #                     temp.append(result)
                     
-    temp = pd.DataFrame(temp)
-    temp.to_csv('./streamlit/clause.csv', index=False)
-    return temp
+    # temp = pd.DataFrame(temp)
+    # temp.to_csv('./streamlit/clause.csv', index=False)
+    # return temp
 
 def merge_classification_penalty():
-    classification = pd.read_csv('./streamlit/classification.csv')
-    penalty = pd.read_csv('./streamlit/penalty.csv')
+    classification = pd.read_csv('./streamlit/files/classification.csv')
+    penalty = pd.read_csv('./streamlit/files/penalty.csv')
     
     classification = classification.drop_duplicates()
     penalty = penalty.drop_duplicates()
@@ -185,7 +185,7 @@ def merge_classification_penalty():
 def get_country():
     country = hoilday_country()
     country = pd.DataFrame(country)
-    country.to_csv('./streamlit/country.csv', index=False)
+    country.to_csv('./streamlit/files/country.csv', index=False)
     return country
 
 

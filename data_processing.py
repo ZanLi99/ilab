@@ -3,8 +3,8 @@ import numpy as np
 
 
 def cleaning():
-    classification = pd.read_csv('./streamlit/classification.csv')
-    penalty = pd.read_csv('./streamlit/penalty.csv')
+    classification = pd.read_csv('./streamlit/files/classification.csv')
+    penalty = pd.read_csv('./streamlit/files/penalty.csv')
     
     classification = classification.drop_duplicates()
     penalty = penalty.drop_duplicates()
