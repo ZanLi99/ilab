@@ -180,7 +180,7 @@ def merge_classification_penalty():
 
     merged_df = A.merge(B, on='base_pay_rate_id', how='inner')
     merged_df.dropna(subset=["base_pay_rate_id"], axis=0, inplace=True)
-    merged_df.to_csv('./streamlit/merge_classification_penalty.csv', index=False)
+    merged_df.to_csv('./streamlit/files/merge_classification_penalty.csv', index=False)
 
 def get_country():
     country = hoilday_country()
