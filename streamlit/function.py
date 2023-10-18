@@ -278,10 +278,20 @@ def calculate_salary():
 
         time_difference = datetime.combine(datetime.min, worktime_End) - datetime.combine(datetime.min, worktime_Start)
         hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
-        
-        salary = round(((end_date - start_date).days + 1 - count_weekend_days) *st.session_state['User_salary'])
+
+        if st.session_state['salary_type'] == "Daily":
+            salary = round(((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'])
+        elif st.session_state['salary_type'] == "Hourly":
+            salary = round(((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'] * hours)
+        elif st.session_state['salary_type'] == "Weekly":
+            salary = round(
+                ((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'] /40 * hours)
+        else:
+            salary = round(
+                ((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary']/1976* hours)
+
         if salary != 0 :
-            penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number']))
+            penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number'])) + st.session_state["overtime_FT"]
             final_salary = round(salary+penalty)
         
             sizes = [salary,penalty]
@@ -300,16 +310,42 @@ def calculate_salary():
 
 def calculate_penalty():
     if st.session_state['age'] == "16 years of age and under":
-        age_rate = 50
+        age_rate = 0.5
     elif st.session_state['age'] == "17 years of age":
-        age_rate = 60
+        age_rate = 0.6
     elif st.session_state['age'] == "18 years of age":
-        age_rate = 70
+        age_rate = 0.7
     elif st.session_state['age'] == "19 years of age":
-        rate = 85
+        age_rate = 0.85
     else:
-        age_rate = 100
+        age_rate = 1
 
     salary = st.session_state['User_salary']
     salary = salary * age_rate
 
+def calculate_overtime_FT():
+    for i in range(0, len(st.session_state['full_time_ot_hour'])):
+        overtime_hours = st.session_state['full_time_ot_hour'][i]
+        overtime_day = st.session_state['full_time_ot_day'][i]
+
+        if overtime_day.weekday() >= 5:
+            overtime_FT = 2 * overtime_hours
+        else:
+            if overtime_hours <= 2:
+                overtime_FT = 1.5 * overtime_hours
+            else:
+                overtime_FT = 2 * overtime_hours
+
+        if st.session_state['salary_type'] == "Daily":
+            overtime_FT =  st.session_state['User_salary']/7.5* overtime_FT
+
+        elif st.session_state['salary_type'] == "Hourly":
+            overtime_FT =  st.session_state['User_salary'] * overtime_FT
+
+        elif st.session_state['salary_type'] == "Weekly":
+            overtime_FT = st.session_state['User_salary'] /38 * overtime_FT
+
+        else:
+            overtime_FT =  st.session_state['User_salary']/1976* overtime_FT
+
+        st.session_state["overtime_FT"] = st.session_state["overtime_FT"] + overtime_FT
