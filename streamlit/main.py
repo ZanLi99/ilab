@@ -47,8 +47,8 @@ if page == "Calculation" or page == "Casual":
         calculate_weekend()
         calculate_penalty()
         calculate_overtime_FT()
-        st.write(st.session_state["overtime_FT"])
-        st.write(st.session_state['full_time_ot_hour'])
+        # st.write(st.session_state["overtime_FT"])
+        # st.write(st.session_state['full_time_ot_hour'])
         calculate_salary()
     if type == 'Part Time':
         salary()
