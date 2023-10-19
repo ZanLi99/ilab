@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from st_session import initialize_st
 
-from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime,get_holiday_df,chooseholiday,calculate_weekend,calculate_salary
+from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime,get_holiday_df,chooseholiday,calculate_weekend,calculate_salary, calculate_overtime_FT
 from input import inputjob,worktime,work_type,work_time_everyday,salary,choosecountry,part_time_input,salary_type
 import random
 
@@ -30,9 +30,9 @@ initialize_st()
 
 #with tab1:
     #st.header("penalty")
-page = st.sidebar.selectbox("Select Page", ["Salary", "WageCraft Hospitality Award"])
+page = st.sidebar.selectbox("WageCraft Hospitality Wage Calculator", ["Calculation", "Prediction"])
 
-if page == "Salary" or page == "Casual":
+if page == "Calculation" or page == "Casual":
     st.header("Salary")
     choosecountry()
     inputjob()
@@ -40,18 +40,21 @@ if page == "Salary" or page == "Casual":
     if type == 'Full Time':
         salary_type()
         salary()
-        work_time_everyday()
         worktime()
+        work_time_everyday()
         get_holiday_df()
         chooseholiday() 
         calculate_weekend()
         calculate_penalty()
+        calculate_overtime_FT()
+        st.write(st.session_state["overtime_FT"])
+        st.write(st.session_state['full_time_ot_hour'])
         calculate_salary()
     if type == 'Part Time':
         salary()
         part_time_input()
 
-elif page == "WageCraft Hospitality Award":
+elif page == "Prediction":
     st.header('WageCraft Hospitality Wage Calculator', divider='gray')
     st.subheader('Industries covered by this award include')
     st.write('- Tourist accomodations')

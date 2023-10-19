@@ -71,6 +71,15 @@ def initialize_st():
         st.session_state['pt_worktime_End'] = []
     if 'overtime_hours' not in st.session_state:
         st.session_state['overtime_hours'] = 0
+    if 'full_time_ot_hour' not in st.session_state:
+        st.session_state['full_time_ot_hour'] = []
+    if 'full_time_ot_day' not in st.session_state:
+        st.session_state['full_time_ot_day'] = []
+    if 'overtime_FT' not in st.session_state:
+        st.session_state['overtime_FT'] = 0
+    if 'final_salary' not in st.session_state:
+        st.session_state['final_salary'] = 0
+
 
 
 # def classification_clean():
