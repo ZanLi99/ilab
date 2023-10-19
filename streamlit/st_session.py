@@ -77,7 +77,8 @@ def initialize_st():
         st.session_state['full_time_ot_day'] = []
     if 'overtime_FT' not in st.session_state:
         st.session_state['overtime_FT'] = 0
-
+    if 'final_salary' not in st.session_state:
+        st.session_state['final_salary'] = 0
 
 
 

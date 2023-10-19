@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from base_rate import base_rate, base_rate_c, base_rate_p
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import requests
 import json
 
@@ -153,13 +153,13 @@ def overtime():
         st.write("Please correct format: dd-mm-yyyy)")
     
     if st.session_state['current_rate_type'] == "Annual" and st.session_state['user_salary']:
-        salary = int(st.session_state['user_salary'])/2080
+        salary = int(st.session_state['user_salary'])/1976
     if st.session_state['current_rate_type'] == "Monthly" and st.session_state['user_salary']:
-        salary = int(st.session_state['user_salary'])/173
+        salary = int(st.session_state['user_salary'])/164
     if st.session_state['current_rate_type'] == "Weekly" and st.session_state['user_salary']:
-        salary = int(st.session_state['user_salary'])/40
+        salary = int(st.session_state['user_salary'])/38
     if st.session_state['current_rate_type'] == "Daily" and st.session_state['user_salary']:
-        salary = int(st.session_state['user_salary'])/8
+        salary = int(st.session_state['user_salary'])/7.5
     if st.session_state['current_rate_type'] == "Hourly" and st.session_state['user_salary']:
         salary = int(st.session_state['user_salary'])
 
@@ -261,51 +261,156 @@ def calculate_weekend():
             st.write(f"Your have worked {number} days at weekend")
             st.session_state['select_weekend'] = number
 
+
 def calculate_salary():
-    if len(st.session_state['worktime']) >=2:
+    if len(st.session_state['worktime']) >= 2:
 
         start_date = st.session_state['worktime'][0]
         end_date = st.session_state['worktime'][1]
-        worktime_Start = st.session_state['worktime_Start'] 
-        worktime_End = st.session_state['worktime_End'] 
+        worktime_Start = st.session_state['worktime_Start']
+        worktime_End = st.session_state['worktime_End']
         count_weekend_days = 0
         current_date = start_date
         while current_date <= end_date:
             if current_date.weekday() == 5 or current_date.weekday() == 6:
                 count_weekend_days += 1
             current_date += timedelta(days=1)
-        days = (end_date - start_date).days - count_weekend_days+st.session_state['select_weekend']
+        days = (end_date - start_date).days - count_weekend_days + st.session_state['select_weekend']
 
         time_difference = datetime.combine(datetime.min, worktime_End) - datetime.combine(datetime.min, worktime_Start)
         hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
 
         if st.session_state['salary_type'] == "Daily":
-            salary = round(((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'])
+            salary = st.session_state['User_salary']/8
         elif st.session_state['salary_type'] == "Hourly":
-            salary = round(((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'] * hours)
+            salary = st.session_state['User_salary']
         elif st.session_state['salary_type'] == "Weekly":
-            salary = round(
-                ((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'] /40 * hours)
+            salary = st.session_state['User_salary'] /40
         else:
-            salary = round(
-                ((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary']/1976* hours)
+            salary = st.session_state['User_salary']/1976
 
-        if salary != 0 :
-            penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number'])) + st.session_state["overtime_FT"]
-            final_salary = round(salary+penalty)
-        
-            sizes = [salary,penalty]
-            labels = ['Basic salery','penalty']
-            fig, ax = plt.subplots(figsize=(6, 6)) 
-            ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
-            ax.axis('equal')  
-            legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
-            ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
+        final_salary = st.session_state["final_salary"]
 
-            ax.set_title('Combination of salary') 
-            st.pyplot(fig)
-            st.session_state['final_salary'] = final_salary
-        #st.write(st.session_state['penalty_rate'])
+        if st.button("Calculate"):
+            final_salary = 0
+            for day in range((end_date - start_date).days + 1):
+                current_date = start_date + timedelta(days=day)
+                is_weekend = current_date.weekday() in [5, 6]
+
+                # st.write(datetime.combine(date(1900, 1, 1), worktime_Start))
+                # st.write(datetime.combine(date(1900, 1, 1), worktime_End))
+                # st.write(datetime.strptime("07:00:00", "%H:%M:%S"))
+                # st.write(datetime.combine(date(1900, 1, 1), worktime_Start) - datetime.strptime("07:00:00", "%H:%M:%S"))
+
+                if not is_weekend:
+                    if datetime.combine(date(1900, 1, 1), worktime_Start) >= datetime.strptime("07:00:00", "%H:%M:%S") and datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("19:00:00", "%H:%M:%S"):
+                        # Worked between 7am and 7pm
+                        final_salary += salary * hours
+
+                    elif datetime.strptime("19:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("23:59:59", "%H:%M:%S") and datetime.strptime("07:00:00", "%H:%M:%S") <= datetime.combine(date(1900, 1, 1), worktime_Start) <= datetime.strptime("19:00:00", "%H:%M:%S"):
+                        # Worked between 7pm and midnight
+                        final_salary += salary * hours + (2.62 * (datetime.combine(date(1900, 1, 1), worktime_End) - datetime.strptime("19:00:00", "%H:%M:%S")).total_seconds() / 3600)
+
+                    elif datetime.strptime("19:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("23:59:59", "%H:%M:%S") and datetime.strptime("19:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_Start) <= datetime.strptime("23:59:59", "%H:%M:%S"):
+                        # Worked between midnight and 7am
+                        final_salary += salary * hours + (2.62 * hours)
+
+                    elif datetime.strptime("00:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("07:00:00", "%H:%M:%S") and datetime.strptime("00:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_Start) <= datetime.strptime("07:00:00", "%H:%M:%S"):
+                        final_salary += salary * hours + (3.93 * hours)
+
+                    elif datetime.strptime("00:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("07:00:00", "%H:%M:%S") and datetime.strptime("19:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_Start) <= datetime.strptime("23:59:59", "%H:%M:%S"):
+                        final_salary += (salary + 3.93) * (datetime.combine(date(1900, 1, 1), worktime_End) - datetime.strptime("00:00:00", "%H:%M:%S")).total_seconds() / 3600 + (salary + 2.62) * (datetime.strptime("23:59:59", "%H:%M:%S") - datetime.combine(date(1900, 1, 1), worktime_Start)).total_seconds() / 3600
+
+                    elif datetime.strptime("00:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_Start) <= datetime.strptime("07:00:00", "%H:%M:%S") and datetime.strptime("07:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("19:00:00", "%H:%M:%S"):
+                        final_salary += (salary + 3.93) * (datetime.strptime("07:00:00", "%H:%M:%S") - datetime.combine(date(1900, 1, 1), worktime_Start)).total_seconds() / 3600 + salary * (datetime.combine(date(1900, 1, 1), worktime_End) - datetime.strptime("07:00:00", "%H:%M:%S")).total_seconds() / 3600
+
+                    elif datetime.strptime("00:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_Start) <= datetime.strptime("07:00:00", "%H:%M:%S") and datetime.strptime("19:00:00", "%H:%M:%S") < datetime.combine(date(1900, 1, 1), worktime_End) <= datetime.strptime("23:59:59", "%H:%M:%S"):
+                        # final_salary += (salary + 3.93) * (datetime.strptime("07:00:00", "%H:%M:%S") - datetime.combine(date(1900, 1, 1), worktime_Start)).total_seconds() / 3600 + salary * (datetime.strptime("19:00:00", "%H:%M:%S")- datetime.strptime("07:00:00", "%H:%M:%S")).total_seconds() / 3600 + (salary + 3.93)(datetime.combine(date(1900, 1, 1), worktime_End) - datetime.strptime("07:00:00", "%H:%M:%S")).total_seconds() / 3600
+                        final_salary += (salary + 3.93) * (
+                                    datetime.strptime("07:00:00", "%H:%M:%S") - datetime.combine(date(1900, 1, 1),
+                                                                                                 worktime_Start)).total_seconds() / 3600 + salary * (
+                                                    datetime.strptime("19:00:00", "%H:%M:%S") - datetime.strptime(
+                                                "07:00:00", "%H:%M:%S")).total_seconds() / 3600 + (salary + 2.69) * (
+                                                    datetime.combine(date(1900, 1, 1), worktime_End) - datetime.strptime(
+                                                "19:00:00", "%H:%M:%S")).total_seconds() / 3600
+                        st.write("yo")
+
+                    else:
+                        final_salary += salary * hours
+                        st.write("hi")
+
+                else:
+                    # Weekend day
+                    if current_date.weekday() == 5:  # Saturday
+                        final_salary += (1.25 * salary*hours)
+                    else:  # Sunday
+                        final_salary += (1.5 * salary*hours)
+
+            # Calculate penalty as before
+            # penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate'] / 100 * (
+            #             st.session_state['select_weekend'] + st.session_state['holiday_number'])) + st.session_state[
+            #               "overtime_FT"]
+
+            if final_salary != 0:
+                final_salary = round(final_salary + st.session_state["overtime_FT"])
+
+                sizes = [final_salary- st.session_state["overtime_FT"], st.session_state["overtime_FT"]]
+                labels = ['Basic salary', 'Overtime']
+                fig, ax = plt.subplots(figsize=(6, 6))
+                ax.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=140)
+                ax.axis('equal')
+                legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+                ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
+
+                ax.set_title('Combination of salary')
+                st.pyplot(fig)
+                st.session_state['final_salary'] = final_salary
+
+# def calculate_salary():
+#     if len(st.session_state['worktime']) >=2:
+#
+#         start_date = st.session_state['worktime'][0]
+#         end_date = st.session_state['worktime'][1]
+#         worktime_Start = st.session_state['worktime_Start']
+#         worktime_End = st.session_state['worktime_End']
+#         count_weekend_days = 0
+#         current_date = start_date
+#         while current_date <= end_date:
+#             if current_date.weekday() == 5 or current_date.weekday() == 6:
+#                 count_weekend_days += 1
+#             current_date += timedelta(days=1)
+#         days = (end_date - start_date).days - count_weekend_days+st.session_state['select_weekend']
+#
+#         time_difference = datetime.combine(datetime.min, worktime_End) - datetime.combine(datetime.min, worktime_Start)
+#         hours = time_difference.total_seconds() / 3600 - st.session_state['Lunch_breack'] / 60
+#
+#         if st.session_state['salary_type'] == "Daily":
+#             salary = round(((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'])
+#         elif st.session_state['salary_type'] == "Hourly":
+#             salary = round(((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'] * hours)
+#         elif st.session_state['salary_type'] == "Weekly":
+#             salary = round(
+#                 ((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary'] /40 * hours)
+#         else:
+#             salary = round(
+#                 ((end_date - start_date).days + 1 - count_weekend_days) * st.session_state['User_salary']/1976* hours)
+#
+#         if salary != 0 :
+#             penalty = round(st.session_state['User_salary'] * st.session_state['penalty_rate']/100 * (st.session_state['select_weekend']+st.session_state['holiday_number'])) + st.session_state["overtime_FT"]
+#             final_salary = round(salary+penalty)
+#
+#             sizes = [salary,penalty]
+#             labels = ['Basic salery','penalty']
+#             fig, ax = plt.subplots(figsize=(6, 6))
+#             ax.pie(sizes, labels=labels,autopct='%1.1f%%', shadow=True, startangle=140)
+#             ax.axis('equal')
+#             legend_labels = [f'{label}: {size}' for label, size in zip(labels, sizes)]
+#             ax.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.3, 1))
+#
+#             ax.set_title('Combination of salary')
+#             st.pyplot(fig)
+#             st.session_state['final_salary'] = final_salary
+#         #st.write(st.session_state['penalty_rate'])
         
 
 def calculate_penalty():
@@ -324,6 +429,7 @@ def calculate_penalty():
     salary = salary * age_rate
 
 def calculate_overtime_FT():
+    st.session_state["overtime_FT"] = 0
     for i in range(0, len(st.session_state['full_time_ot_hour'])):
         overtime_hours = st.session_state['full_time_ot_hour'][i]
         overtime_day = st.session_state['full_time_ot_day'][i]

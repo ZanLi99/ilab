@@ -65,7 +65,7 @@ def work_time_everyday():
 
         st.write(f"You worked {hours:.2f} hours overtime on {d}.")
 
-        if st.button("A new day"):
+        if st.button("Enter"):
             st.session_state['full_time_ot_hour'].append(hours)
             st.session_state['full_time_ot_day'].append(d)
         for i in range(0, len(st.session_state['full_time_ot_hour'])):
