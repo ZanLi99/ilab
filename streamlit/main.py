@@ -16,12 +16,12 @@ from input import inputjob,worktime,work_type,work_time_everyday,salary, age
 
 
 
-st.session_state['country'] = pd.read_csv('./country.csv')
-st.session_state['awards'] = pd.read_csv('./awards.csv')
-st.session_state['classification'] = pd.read_csv('./classification.csv')
+st.session_state['country'] = pd.read_csv('./streamlit/files/country.csv')
+st.session_state['awards'] = pd.read_csv('./streamlit/files/awards.csv')
+st.session_state['classification'] = pd.read_csv('./streamlit/files/classification.csv')
 st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
 st.session_state['selection_class'] = st.session_state['classification']['classification'].drop_duplicates()
-st.session_state['merged'] = pd.read_csv('./merge_classification_penalty.csv')
+st.session_state['merged'] = pd.read_csv('./streamlit/files/merge_classification_penalty.csv')
 
 initialize_st()
 #st.write(st.session_state['classification'])

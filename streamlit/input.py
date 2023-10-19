@@ -28,6 +28,7 @@ def work_type():
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
     if type == 'Full Time':
+
         st.write("Full time employees are people that work 38 ordinary hours a week and are a full time employee")
         # st.image("./Pictures/Full.png", use_column_width=True)
     if type == 'Part Time':
@@ -36,6 +37,7 @@ def work_type():
     if type == 'Casual':
         st.write("A casual employee works irregular hours and has no guarantee of work")
         # st.image("./Pictures/Casual.jpg", use_column_width=True)
+
     return type
     
 
