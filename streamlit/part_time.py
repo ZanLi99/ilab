@@ -2,6 +2,8 @@ import streamlit as st
 import datetime
 import pandas as pd
 from function import get_holiday, get_holiday_df
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
 
 from input import work_type
 
@@ -30,7 +32,7 @@ def part_time_date_salary():
         df['Month'] = df['Month'].map({1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'})
         df['7am-7pm'] = 0
         df['7pm-00:00'] = 0
-        df['00:00-7pm'] = 0
+        df['00:00-7am'] = 0
         date_df = st.data_editor(
         df,
         column_config={
@@ -84,7 +86,7 @@ def part_time_date_salary():
         part_time_rate = {
             '7am-7pm': 1,
             '7pm-00:00': 2.62,
-            '00:00-7pm': 3.93
+            '00:00-7am': 3.93
         }
         if st.session_state['work_type'] == "Part Time":
             basic_rate = 1
@@ -113,7 +115,7 @@ def part_time_date_salary():
             else:
                 public_rate = 1
             daily_wages = 0
-            for column in ['7am-7pm', '7pm-00:00', '00:00-7pm']:
+            for column in ['7am-7pm', '7pm-00:00', '00:00-7am']:
                 hours = row[column] * basic_rate 
                 rate = part_time_rate[column] * public_rate * holiday_rate
 
@@ -154,3 +156,49 @@ def part_time_date_salary():
         #st.write(df_copy)
         st.write('Your **total** salary is:', total_salary)
         st.write(':tulip::tulip::tulip::tulip::tulip:&mdash;\!! Congratulations !!&mdash;\:tulip::tulip::tulip::tulip::tulip:')
+
+        st.write(df_copy['Date'].dt.date)
+        st.write(df_copy['Daily_Wages']* st.session_state['User_salary'])
+        st.write(df_copy)
+
+        # Extract unique dates from the 'Date' column
+        unique_dates = df_copy['Date'].dt.date.unique()
+
+        # Create an index to map each unique date to its corresponding position in the DataFrame
+        date_index = {date: idx for idx, date in enumerate(unique_dates)}
+
+        # Use the index to plot the x-axis
+        x = [date_index[date] for date in df_copy['Date'].dt.date]
+
+        plt.bar(x, df_copy['Daily_Wages']* st.session_state['User_salary'])
+
+        # Set x-axis labels to display the unique dates directly
+        plt.xticks(x, [str(date) for date in unique_dates], rotation=45)
+
+        plt.xlabel('Date')
+        plt.ylabel('Salary')
+        plt.title('Daily Wages')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        st.pyplot(plt)
+
+
+        # Calculate the total hours for each shift
+        total_day_shift = df_copy['7am-7pm'].sum()
+        total_evening_shift = df_copy['7pm-00:00'].sum()
+        total_night_shift = df_copy['00:00-7am'].sum()
+
+        # Data for the pie chart
+        shifts = ['Day Shift', 'Evening Shift', 'Night Shift']
+        total_hours = [total_day_shift, total_evening_shift, total_night_shift]
+
+        # Create a pie chart
+        plt.figure(figsize=(8, 8))
+        plt.pie(total_hours, labels=shifts, autopct='%1.1f%%', startangle=140)
+        plt.title('Distribution of Working Hours by Shift')
+        st.pyplot(plt)
+
+        with st.expander("Explaination of Working Shift"):
+            st.write("Day Shift = 7.00 am to 7.00 pm")
+            st.write("Evening Shift = 7.00 pm to midnight")
+            st.write("Night Shift = midnight to 7.00 am")
