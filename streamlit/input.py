@@ -28,7 +28,7 @@ def work_type():
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
     if type == 'Full Time':
-        with st.expander("Explaination of Full time"):
+        with st.expander("Explanation of Full time"):
             st.write("Full time employees are people that work 38 ordinary hours a week and are a full time employee")
         # st.image("./Pictures/Full.png", use_column_width=True)
     if type == 'Part Time':
@@ -154,6 +154,7 @@ def worktime():
     if len(worktime) >= 2 and worktime[0] and worktime[1]:
         st.write("What's your working period:", worktime[0], "to", worktime[1])
 
+    st.write("Please directly adjust the number of working hours on the table below")
 
 def part_time_input():
     d = st.date_input("When did you work?", datetime.date.today())
