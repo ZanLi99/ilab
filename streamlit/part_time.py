@@ -15,7 +15,7 @@ def part_time_salary():
 
 def part_time_date_salary():
     if len(st.session_state['worktime']) >=2:
-        st.write(st.session_state['worktime'])
+        # st.write(st.session_state['worktime'])
         start_date = st.session_state['worktime'][0]
         end_date = st.session_state['worktime'][1]
 
@@ -157,9 +157,14 @@ def part_time_date_salary():
         st.write('Your **total** salary is:', total_salary)
         st.write(':tulip::tulip::tulip::tulip::tulip:&mdash;\!! Congratulations !!&mdash;\:tulip::tulip::tulip::tulip::tulip:')
 
-        st.write(df_copy['Date'].dt.date)
-        st.write(df_copy['Daily_Wages']* st.session_state['User_salary'])
-        st.write(df_copy)
+        # st.write(df_copy['Date'].dt.date)
+        # st.write(df_copy['Daily_Wages']* st.session_state['User_salary'])
+        # st.write(df_copy)
+        new_df = pd.DataFrame({
+            'Date': df_copy['Date'].dt.date,
+            'Daily Wages': df_copy['Daily_Wages'] * st.session_state['User_salary']
+        })
+        st.dataframe(new_df, width=600)
 
         # Extract unique dates from the 'Date' column
         unique_dates = df_copy['Date'].dt.date.unique()
@@ -198,7 +203,7 @@ def part_time_date_salary():
         plt.title('Distribution of Working Hours by Shift')
         st.pyplot(plt)
 
-        with st.expander("Explaination of Working Shift"):
+        with st.expander("Explanation of Working Shift"):
             st.write("Day Shift = 7.00 am to 7.00 pm")
             st.write("Evening Shift = 7.00 pm to midnight")
             st.write("Night Shift = midnight to 7.00 am")
