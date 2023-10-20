@@ -12,6 +12,7 @@ import random
 # from model import filter_job
 from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime
 from input import inputjob,worktime,work_type,work_time_everyday,salary, age
+from part_time import part_time_salary,part_time_date_salary
 
 
 
@@ -32,12 +33,13 @@ initialize_st()
     #st.header("penalty")
 page = st.sidebar.selectbox("WageCraft Hospitality Wage Calculator", ["Calculation", "Prediction"])
 
-if page == "Calculation" or page == "Casual":
+if page == "Calculation" :
     st.header("Salary")
     choosecountry()
     inputjob()
-    type = work_type()
-    if type == 'Full Time':
+    work_type()
+    if  st.session_state['work_type'] == 'Full Time' :
+        age()
         salary_type()
         salary()
         worktime()
@@ -50,9 +52,14 @@ if page == "Calculation" or page == "Casual":
         # st.write(st.session_state["overtime_FT"])
         # st.write(st.session_state['full_time_ot_hour'])
         calculate_salary()
-    if type == 'Part Time':
-        salary()
-        part_time_input()
+    if  st.session_state['work_type'] == 'Part Time' or  st.session_state['work_type'] == "Casual":
+        age()
+        #salary()
+        #part_time_input()
+        part_time_salary()
+        worktime()
+        part_time_date_salary()
+        
 
 elif page == "Prediction":
     st.header('WageCraft Hospitality Wage Calculator', divider='gray')
@@ -286,7 +293,7 @@ elif page == "Prediction":
 
 # inputjob()
 # work_type()
-age()
+
 # salary()
 # work_time_everyday()
 # worktime()

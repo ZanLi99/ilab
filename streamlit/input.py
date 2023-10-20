@@ -37,8 +37,6 @@ def work_type():
     if type == 'Casual':
         st.write("A casual employee works irregular hours and has no guarantee of work")
         # st.image("./Pictures/Casual.jpg", use_column_width=True)
-
-    return type
     
 
 def work_time_everyday():

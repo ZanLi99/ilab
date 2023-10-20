@@ -191,7 +191,6 @@ def get_holiday(year, country):
     public_holidays = json.loads(response.content)
     public_holidays = pd.DataFrame(public_holidays)
     public_holidays['date'] = pd.to_datetime(public_holidays['date'])
-    public_holidays['date'] = pd.to_datetime(public_holidays['date'])
     if 'worktime' in st.session_state and len(st.session_state['worktime']) >= 2:
         start_date = st.session_state['worktime'][0]
         end_date = st.session_state['worktime'][1]
@@ -201,7 +200,6 @@ def get_holiday(year, country):
     return public_holidays
 
 def get_holiday_df():
-    st.title("Did you work on public holiday or weekend?")
     if len(st.session_state['worktime']) >=2:
         if st.session_state['worktime'][0].year != st.session_state['worktime'][1].year:
             merged_df = pd.concat([get_holiday(st.session_state['worktime'][0].year, st.session_state['user_country'].values[0]),
@@ -210,19 +208,20 @@ def get_holiday_df():
             merged_df.reset_index(drop=True, inplace=True)
             if merged_df.empty:
                 st.write('There is no holiday.')
-            else:
-                st.write(merged_df[['date','localName','name']])
+            # else:
+            #     st.write(merged_df[['date','localName','name']])
             st.session_state['holiday'] = merged_df
     if len(st.session_state['worktime']) >=2:
         if st.session_state['worktime'][0].year == st.session_state['worktime'][1].year:
             holiday = get_holiday(st.session_state['worktime'][0].year, st.session_state['user_country'].values[0])
             if holiday.empty:
                 st.write('There is no holiday.')
-            else:
-                st.write(holiday[['date','localName','name']])
+            # else:
+            #     st.write(holiday[['date','localName','name']])
             st.session_state['holiday'] = holiday
 
 def chooseholiday():
+    st.title("Did you work on public holiday or weekend?")
     df = st.session_state['holiday']
 
     selected_rows = []
