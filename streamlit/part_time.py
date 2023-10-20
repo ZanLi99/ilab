@@ -142,4 +142,5 @@ def part_time_date_salary():
         total_salary = sum(df_copy['Daily_Wages'] * st.session_state['User_salary'])
 
         #st.write(df_copy)
-        st.write('Your total salary is:', total_salary)
+        st.write('Your **total** salary is:', total_salary)
+        st.write(':tulip::tulip::tulip::tulip::tulip:&mdash;\!! Congratulations !!&mdash;\:tulip::tulip::tulip::tulip::tulip:')
