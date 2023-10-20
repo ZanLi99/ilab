@@ -36,10 +36,10 @@ page = st.sidebar.selectbox("WageCraft Hospitality Wage Calculator", ["Calculati
 if page == "Calculation" :
     st.header("Salary")
     choosecountry()
-    inputjob()
     work_type()
     if  st.session_state['work_type'] == 'Full Time' :
-        age()
+        inputjob()
+        #age()
         salary_type()
         salary()
         worktime()
@@ -53,7 +53,7 @@ if page == "Calculation" :
         # st.write(st.session_state['full_time_ot_hour'])
         calculate_salary()
     if  st.session_state['work_type'] == 'Part Time' or  st.session_state['work_type'] == "Casual":
-        age()
+        #age()
         #salary()
         #part_time_input()
         part_time_salary()
