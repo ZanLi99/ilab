@@ -34,9 +34,19 @@ def part_time_date_salary():
         date_df = st.data_editor(
         df,
         column_config={
-            "worktime": st.column_config.NumberColumn(
+            "7am-7pm": st.column_config.NumberColumn(
                 min_value=0,
-                max_value=24,
+                max_value=12,
+                step=1,
+            ),
+            "7pm-00:00": st.column_config.NumberColumn(
+                min_value=0,
+                max_value=7,
+                step=1,
+            ),
+            "00:00-7pm": st.column_config.NumberColumn(
+                min_value=0,
+                max_value=7,
                 step=1,
             ),
         },
