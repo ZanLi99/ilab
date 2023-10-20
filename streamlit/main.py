@@ -34,9 +34,10 @@ initialize_st()
 page = st.sidebar.selectbox("WageCraft Hospitality Wage Calculator", ["Calculation", "Prediction"])
 
 if page == "Calculation" :
-    st.header("Salary")
+    #st.header("Salary")
     choosecountry()
     work_type()
+    
     if  st.session_state['work_type'] == 'Full Time' :
         inputjob()
         #age()
