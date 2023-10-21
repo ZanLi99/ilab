@@ -43,7 +43,7 @@ def part_time_date_salary():
             ),
             "7pm-00:00": st.column_config.NumberColumn(
                 min_value=0,
-                max_value=7,
+                max_value=5,
                 step=1,
             ),
             "00:00-7pm": st.column_config.NumberColumn(
