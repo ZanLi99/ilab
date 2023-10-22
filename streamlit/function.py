@@ -221,7 +221,7 @@ def get_holiday_df():
             st.session_state['holiday'] = holiday
 
 def chooseholiday():
-    st.title("Did you work on public holiday or weekend?")
+    st.title("**Did you work on public holiday or weekend?**")
     df = st.session_state['holiday']
 
     selected_rows = []
