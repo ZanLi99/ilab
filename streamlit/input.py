@@ -5,7 +5,7 @@ import plotly.express as px
 
 def choosecountry():
     # select country
-    st.title("Where are you from?")
+    st.title("**Where are you from?**")
     user_country = st.selectbox("", st.session_state['country']['name'],index=4)
     st.session_state['user_country'] = st.session_state['country'][st.session_state['country']['name'] == user_country]['countryCode']
     #st.write(st.session_state['user_country'].values)
@@ -14,7 +14,7 @@ def inputjob():
     # The interface of input user's job
     # st.session_state['user_input'] -> Save the job of inputting
 
-    st.title("What's your job?")
+    st.title("**What's your job?**")
     user_input = st.text_input("your job", "")
     st.write("What's your role:", user_input)
     st.session_state['user_input'] = user_input
@@ -23,7 +23,7 @@ def work_type():
     # The interface of input job's type
     # st.session_state['work_type'] -> save the type of work
 
-    st.title("What's your job type?")
+    st.title("**What's your job type?**")
     type = st.selectbox("", ("Full Time","Part Time","Casual"))
     st.session_state['work_type'] = type
     st.write("Your type of work:", type)
@@ -47,7 +47,7 @@ def work_time_everyday():
     # st.session_state['worktime_End'] -> The end time
     # st.session_state['Lunch_breack'] -> The break time / lunch time
 
-    st.title("Please enter your daily working time")
+    st.title("**Please enter your daily working time**")
     worktime_Start = st.time_input('Start time', datetime.time(8, 00))
     worktime_End = st.time_input('End time', datetime.time(17, 00))
     Lunch_breack = st.number_input('Lunch break (minutes):',0)
@@ -76,11 +76,11 @@ def work_time_everyday():
 
 
 def salary_type():
-    st.title( "Select the payment frequency you want to calculate?")
+    st.title( "**Select the payment frequency you want to calculate?**")
 def work_time_weekday():
     # The interface of input user's worktime of weekday
 
-    st.title("What's your working hours on weekday?")
+    st.title("**What's your working hours on weekday?**")
     working_hour = st.number_input('Total working hours', 0)
     over_time_1 = st.number_input('Working over time (First 2 hours) (minutes):',0)
     over_time_2 = st.number_input('Working over time (After 2 hours) (minutes):', 0)
@@ -107,7 +107,7 @@ def work_time_weekday():
 def work_time_weekend():
     # The interface of input user's worktime of weekend
 
-    st.title("What's your working hours on weekend?")
+    st.title("**What's your working hours on weekend?**")
     working_hour = st.number_input('Total working hours', 0)
     over_time_1 = st.number_input('Working over time (First 2 hours) (minutes):',0)
     over_time_2 = st.number_input('Working over time (After 2 hours) (minutes):', 0)
@@ -122,7 +122,7 @@ def work_time_weekend():
 
 
 def salary():
-    st.title( "What's your salary?")
+    st.title( "**What's your salary?**")
 
     salary_type = st.radio(
        "",
@@ -135,7 +135,7 @@ def salary():
     st.session_state['User_salary'] = User_salary
 
 def worktime():
-    st.title("What's your working period?")
+    st.title("**What's your working period?**")
 
     today = datetime.datetime.now()
 
@@ -351,7 +351,7 @@ def penalty_input():
 
 
 def age():
-    st.title("What's your age?")
+    st.title("**What's your age?**")
 
     age = st.selectbox("", ("16 years of age and under", "17 years of age",
                                             "18 years of age", "19 years of age", "20 years of age and above"))

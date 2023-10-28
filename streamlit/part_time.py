@@ -9,7 +9,7 @@ from input import work_type
 
 
 def part_time_salary():
-    st.title( "What's your salary?")
+    st.title("**What's your salary?**")
     User_salary = st.number_input("Your salary:",0)
     st.session_state['User_salary'] = User_salary
 
@@ -43,7 +43,7 @@ def part_time_date_salary():
             ),
             "7pm-00:00": st.column_config.NumberColumn(
                 min_value=0,
-                max_value=7,
+                max_value=5,
                 step=1,
             ),
             "00:00-7pm": st.column_config.NumberColumn(
@@ -153,7 +153,7 @@ def part_time_date_salary():
 
         total_salary = sum(df_copy['Daily_Wages'] * st.session_state['User_salary'])
 
-        #st.write(df_copy)
+        #st.write(df_copy[['Date','Daily_Wages','Weekly_Wages']])
         st.write('Your **total** salary is:', total_salary)
         st.write(':tulip::tulip::tulip::tulip::tulip:&mdash;\!! Congratulations !!&mdash;\:tulip::tulip::tulip::tulip::tulip:')
 
@@ -162,10 +162,12 @@ def part_time_date_salary():
         # st.write(df_copy)
         new_df = pd.DataFrame({
             'Date': df_copy['Date'].dt.date,
-            'Daily Wages': df_copy['Daily_Wages'] * st.session_state['User_salary']
+            'Daily Wages': df_copy['Daily_Wages'] * st.session_state['User_salary'],
+            'Weekly_Wages': df_copy['Weekly_Wages'] * st.session_state['User_salary']
         })
         st.dataframe(new_df, width=600)
-
+        
+            
         # Extract unique dates from the 'Date' column
         unique_dates = df_copy['Date'].dt.date.unique()
 
@@ -196,14 +198,11 @@ def part_time_date_salary():
         # Data for the pie chart
         shifts = ['Day Shift', 'Evening Shift', 'Night Shift']
         total_hours = [total_day_shift, total_evening_shift, total_night_shift]
-
+        if total_day_shift != 0 or total_evening_shift != 0 or total_night_shift!=0 :
         # Create a pie chart
-        plt.figure(figsize=(8, 8))
-        plt.pie(total_hours, labels=shifts, autopct='%1.1f%%', startangle=140)
-        plt.title('Distribution of Working Hours by Shift')
-        st.pyplot(plt)
+            plt.figure(figsize=(8, 8))
+            plt.pie(total_hours, labels=shifts, autopct='%1.1f%%', startangle=140)
+            plt.title('Distribution of Working Hours by Shift')
+            st.pyplot(plt)
 
-        with st.expander("Explanation of Working Shift"):
-            st.write("Day Shift = 7.00 am to 7.00 pm")
-            st.write("Evening Shift = 7.00 pm to midnight")
-            st.write("Night Shift = midnight to 7.00 am")
+       

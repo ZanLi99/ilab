@@ -1,6 +1,7 @@
 import streamlit as st
 import datetime
 import matplotlib.pyplot as plt
+from PIL import Image
 
 import pandas as pd
 from st_session import initialize_st
@@ -23,6 +24,16 @@ st.session_state['classification'] = pd.read_csv('./streamlit/files/classificati
 st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
 st.session_state['selection_class'] = st.session_state['classification']['classification'].drop_duplicates()
 st.session_state['merged'] = pd.read_csv('./streamlit/files/merge_classification_penalty.csv')
+
+
+
+st.write('<div style="text-align: center; font-size: 48px; font-weight: bold;">W.A.G.E.S</div>', unsafe_allow_html=True)
+
+
+image = Image.open('./streamlit/Pictures/MicrosoftTeams-image.png')
+st.image(image, caption='MicrosoftTeams-image')
+#st.markdown("---")
+st.write('<hr style="border: 2px solid #000;">', unsafe_allow_html=True)
 
 initialize_st()
 #st.write(st.session_state['classification'])
@@ -59,6 +70,10 @@ if page == "Calculation" :
         #part_time_input()
         part_time_salary()
         worktime()
+        with st.expander("Explanation of Working Shift"):
+            st.write("Day Shift = 7.00 am to 7.00 pm")
+            st.write("Evening Shift = 7.00 pm to midnight")
+            st.write("Night Shift = midnight to 7.00 am")
         part_time_date_salary()
         
 
