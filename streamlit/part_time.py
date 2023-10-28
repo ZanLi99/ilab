@@ -205,7 +205,4 @@ def part_time_date_salary():
             plt.title('Distribution of Working Hours by Shift')
             st.pyplot(plt)
 
-        with st.expander("Explanation of Working Shift"):
-            st.write("Day Shift = 7.00 am to 7.00 pm")
-            st.write("Evening Shift = 7.00 pm to midnight")
-            st.write("Night Shift = midnight to 7.00 am")
+       
