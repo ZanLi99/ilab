@@ -50,7 +50,7 @@ if page == "Calculation" :
     work_type()
     
     if  st.session_state['work_type'] == 'Full Time' :
-        inputjob()
+        #inputjob()
         #age()
         salary_type()
         salary()
