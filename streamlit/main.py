@@ -79,8 +79,7 @@ if page == "Calculation" :
         
 
 elif page == "Prediction":
-    st.set_page_config(page_title='WageCraft Hospitality Award')
-
+    #st.set_page_config(page_title='WageCraft Hospitality Award')
 
     st.header('WageCraft Hospitality Wage Calculator', divider='gray')
     st.subheader('Some of the Industries covered by this award include', help = 'To help find out what industry you are in use [This link](https://www.fairwork.gov.au/employment-conditions/awards/awards-summary/ma000009-summary)')
@@ -355,7 +354,7 @@ elif page == "Prediction":
             'There are some limitations to the Hospitality wage calculator such as not including breaks, public holidays, overtime or superannuation The award does not cover all types of jobs covered in the hospitality award such as office workers or casino workers.     This application is also limited in not allowing you to work past midnight on a day and may use an out of date award. This application does not account for part-time workers that dont have the same regular hours as an fulltime-employee'
     )
         
-        st.write('For more information go to [Fairwork Ombudsman](https://library.fairwork.gov.au/award/?krn=MA000009) or to [Australian Payroll Association](https://www.austpayroll.com.au/)')
+    st.write('For more information go to [Fairwork Ombudsman](https://library.fairwork.gov.au/award/?krn=MA000009) or to [Australian Payroll Association](https://www.austpayroll.com.au/)')
 
 
 
