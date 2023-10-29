@@ -11,6 +11,26 @@ def initialize_st():
         st.session_state['penalty_rate'] = 150
     if 'current_rate_type' not in st.session_state:
         st.session_state['current_rate_type'] = []
+    if 'age' not in st.session_state:
+        st.session_state['age'] = []
+    if 'working_hour_weekday' not in st.session_state:
+        st.session_state['working_hour_weekday'] = []
+    if 'working_hour_weekend' not in st.session_state:
+        st.session_state['working_hour_weekend'] = []
+    if 'working_hour_holiday' not in st.session_state:
+        st.session_state['working_hour_holiday'] = []
+    if 'over_time_weekday_1' not in st.session_state:
+        st.session_state['over_time_weekday_1'] = []
+    if 'over_time_weekday_2' not in st.session_state:
+        st.session_state['over_time_weekday_2'] = []
+    if 'over_time_holiday_1' not in st.session_state:
+        st.session_state['over_time_holiday_1'] = []
+    if 'over_time_holiday_2' not in st.session_state:
+        st.session_state['over_time_holiday_2'] = []
+    if 'over_time_weekend_1' not in st.session_state:
+        st.session_state['over_time_weekend_1'] = []
+    if 'over_time_weekend_2' not in st.session_state:
+        st.session_state['over_time_weekend_2'] = []
     # ---------
     if 'user_salary' not in st.session_state:
         st.session_state['user_salary'] = 0
@@ -39,20 +59,31 @@ def initialize_st():
         st.session_state['part_time_list'] = []
     if 'part_time_day' not in st.session_state:
         st.session_state['part_time_day'] = []
-
-    st.session_state['country'] = pd.read_csv('country.csv')
-    st.session_state['awards'] = pd.read_csv('awards.csv')
-    st.session_state['classification'] = pd.read_csv('classification.csv')
-    st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
-    st.session_state['selection_class'] = st.session_state['classification']['classification'].drop_duplicates()
-    st.session_state['merged'] = pd.read_csv('merge_classification_penalty.csv')
-
     if 'classification_annual_rate' not in st.session_state:
         st.session_state['classification_annual_rate'] = []
     if 'base_rate_type' not in st.session_state:
         st.session_state['base_rate_type'] = []
     if 'user_salary' not in st.session_state:
         st.session_state['user_salary'] = []
+    if 'pt_worktime_Start' not in st.session_state:
+        st.session_state['pt_worktime_Start'] = []
+    if 'pt_worktime_End' not in st.session_state:
+        st.session_state['pt_worktime_End'] = []
+    if 'overtime_hours' not in st.session_state:
+        st.session_state['overtime_hours'] = 0
+    if 'full_time_ot_hour' not in st.session_state:
+        st.session_state['full_time_ot_hour'] = []
+    if 'full_time_ot_day' not in st.session_state:
+        st.session_state['full_time_ot_day'] = []
+    if 'overtime_FT' not in st.session_state:
+        st.session_state['overtime_FT'] = 0
+    if 'final_salary' not in st.session_state:
+        st.session_state['final_salary'] = 0
+    if 'type' not in st.session_state:
+        st.session_state['type'] = 'Full Time '
+
+
+
 
 # def classification_clean():
 #     classification = pd.read_csv('classification.csv')

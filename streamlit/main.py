@@ -1,21 +1,39 @@
 import streamlit as st
 import datetime
 import matplotlib.pyplot as plt
+from PIL import Image
 
 import pandas as pd
 from st_session import initialize_st
-from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime,get_holiday_df,chooseholiday,calculate_weekend,calculate_salary
+
+from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime,get_holiday_df,chooseholiday,calculate_weekend,calculate_salary, calculate_overtime_FT
 from input import inputjob,worktime,work_type,work_time_everyday,salary,choosecountry,part_time_input,salary_type
 import random
 
+# from model import filter_job
+from function import select_class, select_rate_type, base_rate, calculate_penalty,overtime
+from input import inputjob,worktime,work_type,work_time_everyday,salary, age
+from part_time import part_time_salary,part_time_date_salary
 
 
-st.session_state['country'] = pd.read_csv('./country.csv')
-st.session_state['awards'] = pd.read_csv('./awards.csv')
-st.session_state['classification'] = pd.read_csv('./classification.csv')
+
+
+st.session_state['country'] = pd.read_csv('./streamlit/files/country.csv')
+st.session_state['awards'] = pd.read_csv('./streamlit/files/awards.csv')
+st.session_state['classification'] = pd.read_csv('./streamlit/files/classification.csv')
 st.session_state['classification'] = st.session_state['classification'].apply(lambda x: x.astype(str).str.lower() if x.dtype == "object" else x)
 st.session_state['selection_class'] = st.session_state['classification']['classification'].drop_duplicates()
-st.session_state['merged'] = pd.read_csv('./merge_classification_penalty.csv')
+st.session_state['merged'] = pd.read_csv('./streamlit/files/merge_classification_penalty.csv')
+
+
+
+st.write('<div style="text-align: center; font-size: 48px; font-weight: bold;">W.A.G.E.S</div>', unsafe_allow_html=True)
+
+
+image = Image.open('./streamlit/Pictures/MicrosoftTeams-image.png')
+st.image(image, caption='MicrosoftTeams-image')
+#st.markdown("---")
+st.write('<hr style="border: 2px solid #000;">', unsafe_allow_html=True)
 
 initialize_st()
 #st.write(st.session_state['classification'])
@@ -24,28 +42,42 @@ initialize_st()
 
 #with tab1:
     #st.header("penalty")
-page = st.sidebar.selectbox("Select Page", ["Salary", "WageCraft Hospitality Award"])
+page = st.sidebar.selectbox("WageCraft Hospitality Wage Calculator", ["Calculation", "Prediction"])
 
-if page == "Salary":
-    st.header("Salary")
+if page == "Calculation" :
+    #st.header("Salary")
     choosecountry()
-    inputjob()
-    type = work_type()
-    if type == 'Full Time':
+    work_type()
+    
+    if  st.session_state['work_type'] == 'Full Time' :
+        inputjob()
+        #age()
         salary_type()
         salary()
-        work_time_everyday()
         worktime()
+        work_time_everyday()
         get_holiday_df()
         chooseholiday() 
         calculate_weekend()
         calculate_penalty()
+        calculate_overtime_FT()
+        # st.write(st.session_state["overtime_FT"])
+        # st.write(st.session_state['full_time_ot_hour'])
         calculate_salary()
-    if type == 'Part Time':
-        salary()
-        part_time_input()
+    if  st.session_state['work_type'] == 'Part Time' or  st.session_state['work_type'] == "Casual":
+        #age()
+        #salary()
+        #part_time_input()
+        part_time_salary()
+        worktime()
+        with st.expander("Explanation of Working Shift"):
+            st.write("Day Shift = 7.00 am to 7.00 pm")
+            st.write("Evening Shift = 7.00 pm to midnight")
+            st.write("Night Shift = midnight to 7.00 am")
+        part_time_date_salary()
+        
 
-elif page == "WageCraft Hospitality Award":
+elif page == "Prediction":
     st.header('WageCraft Hospitality Wage Calculator', divider='gray')
     st.subheader('Industries covered by this award include')
     st.write('- Tourist accomodations')
@@ -273,6 +305,14 @@ elif page == "WageCraft Hospitality Award":
     plt.xticks(rotation=45)  
     st.pyplot(plt)
 
+
+
+# inputjob()
+# work_type()
+
+# salary()
+# work_time_everyday()
+# worktime()
 
         
     # select_class()
