@@ -223,3 +223,4 @@ st.write('You are receiving ', f'${casual_bonus}' ' for being a casual employee'
 df.columns = ['pay', 'type of bonus']
 df = df[df.pay > 0]
 st.bar_chart(data=df, y='pay', x='type of bonus')
+st.write('test')
