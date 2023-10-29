@@ -364,6 +364,7 @@ def calculate_salary():
                 ax.set_title('Combination of salary')
                 st.pyplot(fig)
                 st.session_state['final_salary'] = final_salary
+                st.subheader(f"Your final Salary: :red[*{final_salary}*]")
 
 # def calculate_salary():
 #     if len(st.session_state['worktime']) >=2:
